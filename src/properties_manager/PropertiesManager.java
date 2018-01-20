@@ -46,6 +46,10 @@ public class PropertiesManager {
 
     // THIS WILL LOAD THE XML FOR US
     private XMLUtilities xmlUtil;
+    
+    // THIS IS THE CUSTOMLY SET DIRECTORY WHERE THE XML DATA
+    // FILES ARE TO BE KEPT, THIS MUST BE SET BEFORE LOADING
+    private String dataPath;
 
     // THESE CONSTANTS ARE USED FOR LOADING PROPERTIES AS THEY ARE
     // THE ESSENTIAL ELEMENTS AND ATTRIBUTES
@@ -56,8 +60,6 @@ public class PropertiesManager {
     public static final String OPTION_ELEMENT                   = "option";
     public static final String NAME_ATT                         = "name";
     public static final String VALUE_ATT                        = "value";
-    public static final String ABBR_ATT                         = "abbr";
-    public static final String DATA_PATH_PROPERTY               = "DATA_PATH";
 
     // THIS IS THE PROPERTIES FILE AGAINST WHICH ALL VALIDATION WILL BE DONE
     public static final String PROPERTIES_SCHEMA_FILE_NAME = "properties_schema.xsd";
@@ -69,6 +71,30 @@ public class PropertiesManager {
         properties = new HashMap<>();
         propertyOptionsLists = new HashMap<>();
         xmlUtil = new XMLUtilities();
+    }
+
+    /**
+     * Accessor method for getting the data path used for loading
+     * properties files.
+     * 
+     * @return The currently set data path.
+     */
+    public String getDataPath() {
+        return dataPath;
+    }
+
+    /**
+     * Mutator method for setting the data path. Note that this
+     * must be done before calling loadProperties but only needs
+     * to be done once if all properties XML files are in the
+     * same directory.
+     * 
+     * @param initDataPath Value to use to set the data path, it 
+     * should be a valid path to a directory where the XML properties
+     * files are to be stored.
+     */
+    public void setDataPath(String initDataPath) {
+        dataPath = initDataPath;
     }
 
     /**
@@ -209,8 +235,7 @@ public class PropertiesManager {
     public void loadProperties(String xmlDataFile)
             throws InvalidXMLFileFormatException {
         // NOTE THAT THE DATA PATH MUST ALREADY HAVE BEEN LOADED
-        String dataPath = getProperty(DATA_PATH_PROPERTY); 
-        xmlDataFile = dataPath + xmlDataFile;
+        xmlDataFile = dataPath + "/" + xmlDataFile;
 
         // GET THE SCHEMA PATH
         String xmlSchemaFile = getClass().getResource(PROPERTIES_SCHEMA_FILE_NAME).getPath();

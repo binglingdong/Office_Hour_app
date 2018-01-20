@@ -13,7 +13,7 @@ import properties_manager.XMLUtilities;
  * This file provides a test bed for the XMLUtilities class, testing both valid
  * and invalid usage to make sure it provides well defined behavior for both.
  * 
- * @author McKillaGorilla
+ * @author McKilla Gorilla
  * @version 2.0
  */
 public class XMLU_Unit_Tests {
@@ -27,8 +27,6 @@ public class XMLU_Unit_Tests {
         "data/invalid_test_properties_3.xml"};
     
     /**
-     * testValidateXMLUsingValidFile
-     * 
      * This test method tests the XMLUtilities' validateXMLDoc method
      * using a properly formatted (i.e. valid) XML file.
      */
@@ -48,8 +46,6 @@ public class XMLU_Unit_Tests {
 
     
     /**
-     * testValidateXMLUsingInvalidFile
-     * 
      * This test method tests the XMLUtilities' validateXMLDoc method
      * using improperly formatted (i.e. valid) XML files.
      */    
@@ -70,8 +66,6 @@ public class XMLU_Unit_Tests {
     }
     
     /**
-     * testLoadUsingValidFile
-     * 
      * This test method tests the XMLUtilities' loadXMLDocument method
      * using a properly formatted (i.e. valid) XML file.
      */
@@ -99,8 +93,6 @@ public class XMLU_Unit_Tests {
     }
 
     /**
-     * testLoadUsingInvalidFile
-     * 
      * This test method tests the XMLUtilities' loadXMLDocument method
      * using improperly formatted (i.e. valid) XML files.
      */    
