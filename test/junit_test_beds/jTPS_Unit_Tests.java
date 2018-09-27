@@ -1,9 +1,10 @@
 package junit_test_beds;
 
 import demo.AddToNum_Transaction;
+import demo.AndMask_Transaction;
 import demo.Num;
 import jtps.jTPS;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -23,7 +24,7 @@ public class jTPS_Unit_Tests {
         // WE'LL JUST USE A SIMPLE NUM FOR TESTING
         jTPS tps = new jTPS();
         Num num = new Num();
-        Assert.assertEquals(num.getNum(), 0);
+        Assert.assertEquals(0, num.getNum());
         
         // ADD 5 TRANSACTION
         tps.addTransaction(new AddToNum_Transaction(num, 5));
@@ -45,6 +46,34 @@ public class jTPS_Unit_Tests {
         Assert.assertEquals(3, tps.getSize());
         Assert.assertEquals(0, tps.getRedoSize());
         Assert.assertEquals(3, tps.getUndoSize());
+    }
+    
+    /**
+     * 
+     */
+    @Test
+    public void testAndMask() {
+        // WE'LL JUST USE A SIMPLE NUM FOR TESTING
+        jTPS tps = new jTPS();
+        Num num = new Num();
+        Assert.assertEquals(0, num.getNum());
+        
+        // ADD 5 TRANSACTION
+        tps.addTransaction(new AddToNum_Transaction(num, 12));
+        tps.addTransaction(new AndMask_Transaction(num, num.getNum(), 4));
+        Assert.assertEquals(4, num.getNum());
+        Assert.assertEquals(2, tps.getSize());
+        
+        tps.undoTransaction();
+        Assert.assertEquals(12, num.getNum());
+        Assert.assertEquals(2, tps.getSize());
+        Assert.assertEquals(1, tps.getRedoSize());
+        Assert.assertEquals(1, tps.getUndoSize());
+
+    }
+    
+    public void testOrMask() {
+        
     }
 
     /**
