@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+    <property_list>
+
+        <!-- CHINESE LANGUAGE SETTINGS FOR DESKTOP JAVA FRAMEWORK CONTROLS -->
+
+        <!-- WELCOME DIALOG TEXT -->
+        <property name="WELCOME_DIALOG_TITLE"               value="欢迎来到办公时间"></property>
+        <property name="WELCOME_DIALOG_RECENT_WORK_LABEL"   value="最近记录"></property>
+        <property name="WELCOME_DIALOG_NEW_BUTTON_TEXT"  value="创建新纪录"></property>
+
+        <!-- GENERIC APP ERROR MESSAGES -->
+        <property name="APP_ERROR_TITLE"            value="应用程序错误"></property>
+        <property name="APP_ERROR_CONTENT"          value="应用程序中出现的错误"></property>
+
+        <!-- PROPERTIES ERROR MESSAGES -->
+        <property name="PROPERTIES_ERROR_TITLE"     value="属性文件错误"></property>
+        <property name="PROPERTIES_ERROR_CONTENT"   value="加载属性文件时出错"></property>
+
+        <!-- FILE TOOLBAR TOOLTIPS -->
+        <property name="NEW_BUTTON_TOOLTIP"         value="新建"></property>
+        <property name="LOAD_BUTTON_TOOLTIP"        value="加载"></property>
+        <property name="CLOSE_BUTTON_TOOLTIP"       value="关闭"></property>
+        <property name="SAVE_BUTTON_TOOLTIP"        value="保存"></property>
+        <property name="EXPORT_BUTTON_TOOLTIP"      value="输出"></property>
+        <property name="EXIT_BUTTON_TOOLTIP"        value="退出"></property>
+
+        <!-- CLIPBOARD TOOLBAR TOOLTIPS -->
+        <property name="CUT_BUTTON_TOOLTIP"         value="剪切"></property>
+        <property name="COPY_BUTTON_TOOLTIP"        value="复制"></property>
+        <property name="PASTE_BUTTON_TOOLTIP"       value="粘贴"></property>
+
+        <!-- UNDO TOOLBAR TOOLTIPS -->
+        <property name="UNDO_BUTTON_TOOLTIP"        value="撤销"></property>
+        <property name="REDO_BUTTON_TOOLTIP"        value="重做"></property>
+
+        <!-- HELP TOOLBAR TOOLTIPS -->
+        <property name="HELP_BUTTON_TOOLTIP"        value="帮助"></property>
+        <property name="LANGUAGE_BUTTON_TOOLTIP"    value="更换语言"></property>
+        <property name="ABOUT_BUTTON_TOOLTIP"       value="关于"></property>
+
+        <!-- NEW FEEDBACK DIALOGS -->	
+        <property name="NEW_SUCCESS_TITLE"      value="新完成"></property>
+        <property name="NEW_SUCCESS_CONTENT"	value="工作已创建但尚未保存"></property>
+        <property name="NEW_ERROR_TITLE"        value="警告：错误"></property>
+        <property name="NEW_ERROR_CONTENT"      value="创建新工作时出错"></property>
+
+        <!-- LOAD FEEDBACK DIALOGS -->
+        <property name="LOAD_WORK_TITLE"        value="加载中"></property>
+        <property name="LOAD_SUCCESS_TITLE"     value="加载完"></property>
+        <property name="LOAD_SUCCESS_CONTENT"   value="文件已成功加载，现在可以编辑"></property>
+        <property name="LOAD_ERROR_TITLE"       value="加载出错"></property>        
+        <property name="LOAD_ERROR_CONTENT"     value="加载失败。 可能存在文件格式问题。"></property>
+
+        <!-- SAVE FEEDBACK DIALOGS -->
+        <property name="SAVE_WORK_TITLE"        value="保存中"></property>
+        <property name="SAVE_SUCCESS_TITLE"     value="已保存"></property>
+        <property name="SAVE_SUCCESS_CONTENT"   value="文件已保存"></property>
+        <property name="SAVE_ERROR_TITLE"       value="保存出错"></property>
+        <property name="SAVE_ERROR_CONTENT"     value="保存失败。 可能是由于文件访问问题。"></property>
+        <property name="SAVE_VERIFY_TITLE"	value="是否保存未保存的文件？"></property>
+        <property name="SAVE_VERIFY_CONTENT"	value="您想先保存未保存的作品吗？"></property>
+
+        <!-- ABOUT DIALOG -->
+        <property name="ABOUT_TITLE"            value="关于OH"></property>
+        <property name="ABOUT_CONTENT"          value="OH, the Office Hours Manager - Debugging Enterprises - © 2018"></property>
+
+        <!-- INVALID EMAIL OR NAME DIALOG -->
+        <property name= "INVALID_EMAIL_TITLE"   value= "错误邮件地址"></property>
+        <property name= "INVALID_EMAIL_CONTENT" value= "您输入的电子邮件地址无效，请重新输入..."></property>
+        <property name= "OH_MISSING_TA_NAME_OR_EMAIL_MESSAGE" value= "缺失TA姓名或邮箱"></property>
+        <property name= "OH_MISSING_TA_NAME_OR_EMAIL_TITLE_LABEL" value= "缺失资料"></property>
+        <property name= "INVALID_COMMAND_TITLE" value= "无效指令"></property>
+        <property name= "DIDNT_CHOOSE_TA_INVALID_CLICK_CONTENT" value= "请先选择TA或者双击有效的格子。"></property>
+        <property name= "REPEATING_NAME_FOR_ADDING_TA_TITLE" value= "姓名已存在"></property>
+        <property name= "REPEATING_NAME_FOR_ADDING_TA_MESSAGE" value= "请重新输入TA姓名"></property>
+        <property name= "REPEATING_EMAIL_FOR_ADDING_TA_TITLE" value= "邮箱已存在"></property>
+        <property name= "REPEATING_EMAIL_FOR_ADDING_TA_MESSAGE" value= "请重新输入TA邮箱"></property>
+        
+        <!-- ENGLISH LANGUAGE SETTINGS SPECIFICALLY FOR TDLM CONTROLS -->
+
+        <!-- LANGUAGE-DEPENDENT TEXT FOR OH WORKSPACE CONTROLS -->
+        <property name="OH_TAS_HEADER_LABEL_TEXT"           value="助教"></property>
+        <property name="OH_ADD_TA_BUTTON_TEXT"              value="添加 TA"></property>
+        <property name="OH_OFFICE_HOURS_HEADER_LABEL_TEXT"  value="工作时间"></property>
+        <property name="OH_NAME_TABLE_COLUMN_TEXT"          value="姓名"></property>
+        <property name="OH_EMAIL_TABLE_COLUMN_TEXT"         value="邮箱"></property>
+        <property name="OH_SLOTS_TABLE_COLUMN_TEXT"         value="时间"></property>
+        <property name="OH_START_TIME_TABLE_COLUMN_TEXT"    value="开始时间"></property>
+        <property name="OH_END_TIME_TABLE_COLUMN_TEXT"      value="结束时间"></property>
+        <property name="OH_MONDAY_TABLE_COLUMN_TEXT"        value="星期一"></property>
+        <property name="OH_TUESDAY_TABLE_COLUMN_TEXT"       value="星期二"></property>
+        <property name="OH_WEDNESDAY_TABLE_COLUMN_TEXT"     value="星期三"></property>
+        <property name="OH_THURSDAY_TABLE_COLUMN_TEXT"      value="星期四"></property>
+        <property name="OH_FRIDAY_TABLE_COLUMN_TEXT"        value="星期五"></property>
+
+        <!-- TO SWITCH BACK TO ANOTHER LANGUAGE -->
+        <property name="LANGUAGE_DIALOG_TITLE"          value="语言选项"></property>
+        <property name="LANGUAGE_DIALOG_HEADER_TEXT"    value="选择一种语言"></property>
+        <property name="LANGUAGE_DIALOG_CONTENT_TEXT"   value="请选择一种语言."></property>
+
+        <property name="WORK_FILE_EXT"          value="*.json"></property>
+	<property name="WORK_FILE_EXT_DESC"     value="教学助理文件"></property>
+        
+        <!-- PROMPT TEXT FOR TEXTFIELDS-->
+        <property name="OH_NAME_TEXT_FIELD"     value="姓名"></property>
+        <property name="OH_EMAIL_TEXT_FIELD"     value="邮箱"></property>
+
+    </property_list>
+    
+    <property_options_list>
+        <property_options name="LANGUAGE_OPTIONS">
+            <option>Chinese</option>
+        </property_options>
+    </property_options_list>
+</properties>
