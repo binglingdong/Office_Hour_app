@@ -23,7 +23,7 @@ public class PM_Demo_Driver {
             PropertiesManager props = PropertiesManager.getPropertiesManager();
 
             // SET THE DATA PATH WHERE THE XML FILE TO LOAD IS LOCATED
-            props.setDataPath("test/junit_test_beds/data/");
+            props.setPropertiesDataPath("test/junit_test_beds/data/");
             
             // LOAD THE XML FILE (MUST BE IN THE DATA PATH DIRECTORY)
             props.loadProperties("valid_test_properties.xml");

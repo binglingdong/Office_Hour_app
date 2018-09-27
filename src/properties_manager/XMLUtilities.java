@@ -2,6 +2,7 @@ package properties_manager;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -66,7 +67,8 @@ public class XMLUtilities
             // Here the schema is loaded from a java.io.File, but you could use 
             // a java.net.URL or a javax.xml.transform.Source instead.
             File schemaLocation = new File(xmlSchemaNameAndPath);
-            Schema schema = factory.newSchema(schemaLocation);
+            URL schemaLocationURL = schemaLocation.toURI().toURL();//new URL("file://" + xmlSchemaNameAndPath);
+            Schema schema = factory.newSchema(schemaLocationURL);
             
             // 3. Get a validator from the schema.
             Validator validator = schema.newValidator();

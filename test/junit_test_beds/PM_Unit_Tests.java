@@ -38,7 +38,7 @@ public class PM_Unit_Tests {
     public void testLoadAndGetProperties() {
         try {
             PropertiesManager props = PropertiesManager.getPropertiesManager();
-            props.setDataPath(UNIT_TEST_PATH);
+            props.setPropertiesDataPath(UNIT_TEST_PATH);
             props.loadProperties(VALID_XML_RESOURCE_PATH);
             Assert.assertEquals(TEST_STRING, props.getProperty(MY_STRING));
         }
@@ -55,7 +55,7 @@ public class PM_Unit_Tests {
     public void testLoadAndGetPropertyOptions() {
         try {
             PropertiesManager props = PropertiesManager.getPropertiesManager();
-            props.setDataPath(UNIT_TEST_PATH);
+            props.setPropertiesDataPath(UNIT_TEST_PATH);
             props.loadProperties(VALID_XML_RESOURCE_PATH);
             ArrayList<String> propOptions = props.getPropertyOptionsList(MY_STRING_OPTIONS);
             Assert.assertEquals(JANUARY, propOptions.get(0));
@@ -75,7 +75,7 @@ public class PM_Unit_Tests {
         try {
             // FIRST, LOAD THE VALID FILE, WHICH HAS 2 PROPERTIES & 2 LISTS
             PropertiesManager props = PropertiesManager.getPropertiesManager();
-            props.setDataPath(UNIT_TEST_PATH);
+            props.setPropertiesDataPath(UNIT_TEST_PATH);
             props.loadProperties(VALID_XML_RESOURCE_PATH);
             
             // THEN CLEAR OUT THE PROPERTIES AND LISTS
@@ -100,7 +100,7 @@ public class PM_Unit_Tests {
     public void testRemoveProperties() {   
         try {
             PropertiesManager props = PropertiesManager.getPropertiesManager();
-            props.setDataPath(UNIT_TEST_PATH);
+            props.setPropertiesDataPath(UNIT_TEST_PATH);
             props.loadProperties(VALID_XML_RESOURCE_PATH);
             props.removeProperty(MY_STRING);
             Assert.assertEquals(null, props.getProperty(MY_STRING));
@@ -119,7 +119,7 @@ public class PM_Unit_Tests {
     public void testRemovePropertyOptions() {  
         try {
             PropertiesManager props = PropertiesManager.getPropertiesManager();
-            props.setDataPath(UNIT_TEST_PATH);
+            props.setPropertiesDataPath(UNIT_TEST_PATH);
             props.loadProperties(VALID_XML_RESOURCE_PATH);
             props.removePropertyOptionsList(MY_STRING_OPTIONS);
             Assert.assertEquals(null, props.getPropertyOptionsList(MY_STRING_OPTIONS));

@@ -49,7 +49,7 @@ public class PropertiesManager {
     
     // THIS IS THE CUSTOMLY SET DIRECTORY WHERE THE XML DATA
     // FILES ARE TO BE KEPT, THIS MUST BE SET BEFORE LOADING
-    private String dataPath;
+    private String propertiesDataPath;
 
     // THESE CONSTANTS ARE USED FOR LOADING PROPERTIES AS THEY ARE
     // THE ESSENTIAL ELEMENTS AND ATTRIBUTES
@@ -79,8 +79,8 @@ public class PropertiesManager {
      * 
      * @return The currently set data path.
      */
-    public String getDataPath() {
-        return dataPath;
+    public String getPropertiesDataPath() {
+        return propertiesDataPath;
     }
 
     /**
@@ -93,8 +93,8 @@ public class PropertiesManager {
      * should be a valid path to a directory where the XML properties
      * files are to be stored.
      */
-    public void setDataPath(String initDataPath) {
-        dataPath = initDataPath;
+    public void setPropertiesDataPath(String initPropertiesDataPath) {
+        propertiesDataPath = initPropertiesDataPath;
     }
 
     /**
@@ -235,7 +235,7 @@ public class PropertiesManager {
     public void loadProperties(String xmlDataFile)
             throws InvalidXMLFileFormatException {
         // NOTE THAT THE DATA PATH MUST ALREADY HAVE BEEN LOADED
-        xmlDataFile = dataPath + "/" + xmlDataFile;
+        xmlDataFile = propertiesDataPath + "/" + xmlDataFile;
 
         // GET THE SCHEMA PATH
         String xmlSchemaFile = getClass().getResource(PROPERTIES_SCHEMA_FILE_NAME).getPath();
@@ -302,6 +302,4 @@ public class PropertiesManager {
     public void removePropertyOptionsList(Object propertyOptionsListToRemove) {
         this.propertyOptionsLists.remove(propertyOptionsListToRemove);
     }
-    
-
 }
