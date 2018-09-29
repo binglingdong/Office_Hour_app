@@ -21,6 +21,7 @@ public class OfficeHoursFoolproofDesign implements FoolproofDesign {
     
     public OfficeHoursFoolproofDesign(OfficeHoursApp initApp) {
         app = initApp;
+        
     }
 
     @Override

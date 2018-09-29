@@ -15,6 +15,7 @@ public enum OfficeHoursPropertyType {
     OH_OK_PROMPT,
     OH_CANCEL_PROMPT,
 
+    
     // THESE ARE FOR TEXT PARTICULAR TO THE APP'S WORKSPACE CONTROLS
     OH_LEFT_PANE,
     OH_TAS_HEADER_PANE,

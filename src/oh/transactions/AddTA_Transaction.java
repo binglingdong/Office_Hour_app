@@ -30,5 +30,6 @@ public class AddTA_Transaction implements jTPS_Transaction {
     public void undoTransaction() {
         data.removeTA(ta);
         copyTAs.remove(ta);
+        
     }
 }

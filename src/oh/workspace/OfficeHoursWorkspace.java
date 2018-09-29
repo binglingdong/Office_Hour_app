@@ -334,6 +334,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         
     }
     
+    
 //This initiazes the fool proof for the workplace pane.
     private void initFoolproofDesign() {
         AppGUIModule gui = app.getGUIModule();

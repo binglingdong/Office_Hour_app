@@ -81,6 +81,7 @@ public class OfficeHoursData implements AppDataComponent {
         }
     }
     
+    
     private String getTimeString(int militaryHour, boolean onHour) {
         String minutesText = "00";
         if (!onHour) {
