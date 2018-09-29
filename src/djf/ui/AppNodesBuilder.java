@@ -15,12 +15,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -361,6 +362,30 @@ public class AppNodesBuilder {
             button.setGraphic(new ImageView(buttonImage));
         }
     }
+    
+    public RadioButton buildRadioButton(Object nodeId,
+            Pane parentPane,
+            String styleClass,
+            boolean enabled,ToggleGroup tg,
+            boolean setToThis) {
+        // NOW MAKE THE RADIO BUTTON
+        
+        RadioButton button = new RadioButton();
+        button.setToggleGroup(tg);
+        if(setToThis){
+            button.setSelected(true);
+        }
+        // INITIALIZE THE OTHER SETTINGS
+        initNode(nodeId, button, parentPane, styleClass, enabled);
+        
+        // MAKE SURE THE LANGUAGE MANAGER HAS IT
+        // SO THAT IT CAN CHANGE THE LANGUAGE AS NEEDED
+        initLabeledNode(nodeId, button);
+
+        // AND RETURN THE COMPLETED BUTTON
+        return button;
+    }
+    
 
     public ToggleButton buildIconToggleButton(Object nodeId,
             Pane parentPane,
