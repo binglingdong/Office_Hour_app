@@ -12,8 +12,8 @@ import static djf.AppPropertyType.INVALID_EMAIL_TITLE;
 import static djf.AppPropertyType.INVALID_EMAIL_CONTENT;
 import java.util.ArrayList;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableView;
 import static oh.OfficeHoursPropertyType.*;
+import oh.workspace.OfficeHoursWorkspace;
 
 
 /**
@@ -28,7 +28,7 @@ public class OfficeHoursController {
         app = initApp;
     }
 
-    public void processAddTA(ArrayList<TeachingAssistantPrototype> copyTAs) {
+    public void processAddTA(ArrayList<TeachingAssistantPrototype> copyTAs, OfficeHoursWorkspace ohws) {
         
         AppGUIModule gui = app.getGUIModule();
         TextField nameTF = (TextField) gui.getGUINode(OH_NAME_TEXT_FIELD);
@@ -66,7 +66,7 @@ public class OfficeHoursController {
                     ta = new TeachingAssistantPrototype(name,email,0,"Undergraduate");
                 }
 
-                AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta, copyTAs);
+                AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta, copyTAs,ohws);
                 app.processTransaction(addTATransaction);
                 
             }

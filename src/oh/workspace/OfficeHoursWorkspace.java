@@ -42,6 +42,7 @@ import oh.transactions.AddOH_Transaction;
 public class OfficeHoursWorkspace extends AppWorkspaceComponent {
     private ArrayList <TeachingAssistantPrototype> copyTAs= new ArrayList<>();
     private ArrayList <TimeSlot> copyOH= new ArrayList<>();
+    private ToggleGroup taTypes= new ToggleGroup();
 
     public OfficeHoursWorkspace(OfficeHoursApp app) {
         super(app);
@@ -54,10 +55,12 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
 
         // SETUP FOOLPROOF DESIGN FOR THIS APP
         initFoolproofDesign();
+        
     }
 
     // THIS HELPER METHOD INITIALIZES ALL THE CONTROLS IN THE WORKSPACE
     private void initLayout() {
+        
         // FIRST LOAD THE FONT FAMILIES FOR THE COMBO BOX
         PropertiesManager props = PropertiesManager.getPropertiesManager();
 
@@ -70,7 +73,6 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         ohBuilder.buildLabel(OfficeHoursPropertyType.OH_TAS_HEADER_LABEL, tasHeaderBox, CLASS_OH_HEADER_LABEL, ENABLED);
         
         //CREATE THE RADIO BUTTONS
-        ToggleGroup taTypes= new ToggleGroup();  
         ohBuilder.buildRadioButton(OfficeHoursPropertyType.OH_TYPE_ALL, tasHeaderBox, CLASS_OH_HEADER_LABEL, ENABLED,taTypes,true);
         ohBuilder.buildRadioButton(OfficeHoursPropertyType.OH_TYPE_UNDERGRADUATE, tasHeaderBox, CLASS_OH_HEADER_LABEL, ENABLED,taTypes,false);
         ohBuilder.buildRadioButton(OfficeHoursPropertyType.OH_TYPE_GRADUATE, tasHeaderBox, CLASS_OH_HEADER_LABEL, ENABLED,taTypes,false);
@@ -148,127 +150,56 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         
         ///////////////////////////////////////// GENERATES DATA FOR THE OH/////////////////////////////////////
         TableView<TimeSlot> OHTableView = (TableView) app.getGUIModule().getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
-               
-        OHTableView.setOnMouseClicked(e->{
+       
+        OHTableView.setOnMouseClicked(e->{     
             TablePosition tp=(TablePosition) officeHoursTable.getSelectionModel().getSelectedCells().get(0);
             int cellCol= tp.getColumn();
             int cellRow= tp.getRow();
             OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
             boolean validCol= data.isDayOfWeekColumn(cellCol);
-            TimeSlot timeSlot;
-
+            
+            // SETUP THE COPYOH IF IS EMPTY (FIRST TIME)
+            if(copyOH.isEmpty()){
+                 initCopyOH(data.getStartHour(),data.getEndHour());
+            }
             //If the ta is selected
             if(validCol&& data.isTASelected()){
                 TeachingAssistantPrototype selectedTA=taTable.getSelectionModel().getSelectedItem();
                 DayOfWeek day= data.getColumnDayOfWeek(cellCol);
-                timeSlot = OHTableView.getSelectionModel().getSelectedItem();
+                TimeSlot timeSlot = OHTableView.getSelectionModel().getSelectedItem();
+                TimeSlot copy_timeSlot= getTimeSlotInCopyOH(timeSlot);
                 //Create a transaction for adding timeslots, and process the transaction
-                AddOH_Transaction addOH_transaction = new AddOH_Transaction(data,timeSlot,selectedTA ,day);
+                AddOH_Transaction addOH_transaction = new AddOH_Transaction(data,timeSlot,selectedTA ,day, copy_timeSlot,copyOH, OHTableView.getItems(), this);
                 app.processTransaction(addOH_transaction);
-                
             }
             else{
                 //no TA is selected
                 AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(),INVALID_COMMAND_TITLE, DIDNT_CHOOSE_TA_INVALID_CLICK_CONTENT);
             }
             ((TableView)(app.getGUIModule().getGUINode(OH_OFFICE_HOURS_TABLE_VIEW))).refresh();
-
-            
-            copyOH.clear();
-            
-            for(TimeSlot original: OHTableView.getItems()){
-                TimeSlot copyTimeSlot= new TimeSlot(original.getStartTime(),original.getEndTime());
-                
-                HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> tas_all = original.getTas();
-                for(DayOfWeek d: DayOfWeek.values()){
-                    ArrayList<TeachingAssistantPrototype> tasOfThatDay= tas_all.get(d);
-                    ArrayList<TeachingAssistantPrototype> tasOfThatDay_copy= (ArrayList<TeachingAssistantPrototype>)tasOfThatDay.clone();
-                    copyTimeSlot.getTas().remove(d);
-                    copyTimeSlot.getTas().put(d, tasOfThatDay_copy);
-                }
-                
-              copyOH.add(copyTimeSlot);  
-            }
         }); 
+        
+
         
         /////////////////AFTER SETTING UP THE TABLE, WE NEED TO LISTEN FOR THE CHANGE IN THE RADIO BUTTON TO CHANGE////////////
         ////////////////////////////////////////////THE TABLEVIEWS ACCORDINGLY//////////////////////////////////////////
-        
         ObservableList<TeachingAssistantPrototype>  allTAs= taTable.getItems();
         ObservableList<TimeSlot> originalOH= OHTableView.getItems();
         
-        //add a listener for toggle group
-        
-        
+
+        //add a listener for toggle group      
         taTypes.selectedToggleProperty().addListener(e->{
+            OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
             app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
-            allTAs.clear();
+            updateTaTableForRadio(allTAs);
             
-            if(taTypes.getSelectedToggle()== app.getGUIModule().getGUINode(OH_TYPE_UNDERGRADUATE)){
-                for(TeachingAssistantPrototype a: copyTAs){
-                    allTAs.add(a);
-                }
-                for(TeachingAssistantPrototype a: copyTAs){
-                    if(a.getType().equals("Graduate")){
-                        allTAs.remove(a);
-                    }
-                }
-            }
-            else if(taTypes.getSelectedToggle()== app.getGUIModule().getGUINode(OH_TYPE_GRADUATE)){
-                for(TeachingAssistantPrototype a: copyTAs){
-                    allTAs.add(a);
-                }
-                for(TeachingAssistantPrototype a: copyTAs ){
-                    if(a.getType().equals("Undergraduate")){
-                        allTAs.remove(a);
-                    }
-                }
-            }
-            else{
-                for(TeachingAssistantPrototype a: copyTAs){
-                    allTAs.add(a);
-                }
-            }
-            
-            //ObservableList<TimeSlot> originalOH= OHTableView.getItems();
-       
             //After they updated the taTable on the left
-            //first reset the originalOH to all
-           
-            
-//            for(int i= 0; i<copyOH.size(); i++){   
-//                TimeSlot originalTime= originalOH.get(i);
-//                TimeSlot copyTime= copyOH.get(i);
-//                HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> copyTas= copyTime.getTas();
-//                HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> originalTas= originalTime.getTas();
-//                
-//                for(DayOfWeek d: DayOfWeek.values()){
-//                    ArrayList<TeachingAssistantPrototype> copyList= copyTas.get(d);
-//                    ArrayList<TeachingAssistantPrototype> originalList=(ArrayList<TeachingAssistantPrototype>)copyList.clone();
-//                    originalTas.remove(d);
-//                    originalTas.put(d, originalList);
-//                }
-//            }
+            //first reset the originalOH to copyOH
+            resetOHToMatchTA(data,originalOH);
             
             //remove the ones that are not in the ta list. 
-//            for(int i= 0; i<copyOH.size(); i++){
-//                TimeSlot originalTime= originalOH.get(i);
-//                TimeSlot copyTime= copyOH.get(i);
-//                HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> copyTas= copyTime.getTas();
-//                HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> originalTas= originalTime.getTas();
-//                
-//                for(DayOfWeek d: DayOfWeek.values()){
-//                    
-//                    ArrayList<TeachingAssistantPrototype> copyList= copyTas.get(d);
-//                    ArrayList<TeachingAssistantPrototype> originalList= originalTas.get(d);
-//                     
-//                    for(TeachingAssistantPrototype ta: copyList){
-//                        if(!allTAs.contains(ta)){
-//                            originalList.remove(ta);
-//                        }
-//                    }
-//                }
-//            }
+            removeOHToMatchTA(data,allTAs,originalOH);
+            
             OHTableView.refresh();
         });
     }
@@ -299,29 +230,25 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
            }           
        });
         
-  
-        TableView taTable= (TableView)gui.getGUINode(OH_TAS_TABLE_VIEW);
-        ObservableList<TeachingAssistantPrototype> taList=  taTable.getItems();
-        
         //update the button after every action. 
         //update the copylist also
         (nameTextField).setOnAction(e -> {
             app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
             if(!addTAButton.isDisabled()){
-                controller.processAddTA(copyTAs);
+                controller.processAddTA(copyTAs, this);
             }
         });
         
         (emailTextField).setOnAction(e -> {
             app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
             if(!addTAButton.isDisabled()){
-                controller.processAddTA(copyTAs);
+                controller.processAddTA(copyTAs,this);
             }
         });
 
         (addTAButton).setOnAction(e -> {
             app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
-            controller.processAddTA(copyTAs);
+            controller.processAddTA(copyTAs, this);
         });
      
         
@@ -346,5 +273,129 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
     @Override
     public void showNewDialog() {
         // WE AREN'T USING THIS FOR THIS APPLICATION
+    }
+    
+    //UPDATE THE TA TABLE ACCORDING TO RADIO BUTTON
+    public void updateTaTableForRadio(ObservableList<TeachingAssistantPrototype> allTAs){
+        allTAs.clear();
+        if(taTypes.getSelectedToggle()== app.getGUIModule().getGUINode(OH_TYPE_UNDERGRADUATE)){
+            for(TeachingAssistantPrototype a: copyTAs){
+                allTAs.add(a);
+            }
+            for(TeachingAssistantPrototype a: copyTAs){
+                if(a.getType().equals("Graduate")){
+                    allTAs.remove(a);
+                }
+            }
+        }
+        else if(taTypes.getSelectedToggle()== app.getGUIModule().getGUINode(OH_TYPE_GRADUATE)){
+            for(TeachingAssistantPrototype a: copyTAs){
+                allTAs.add(a);
+            }
+            for(TeachingAssistantPrototype a: copyTAs ){
+                if(a.getType().equals("Undergraduate")){
+                    allTAs.remove(a);
+                }
+            }
+        }
+        else{
+            for(TeachingAssistantPrototype a: copyTAs){
+                allTAs.add(a);
+            }
+        }
+    }
+    
+    //INITIALING THE 24 TIMESLOTS FOR COPYOH SO THERE'S NO NULL POINTER
+    public void initCopyOH(int startHour, int endHour){
+
+        for (int i = startHour; i <= endHour; i++) {
+            TimeSlot timeSlot = new TimeSlot(   this.getTimeString(i, true),
+                                                this.getTimeString(i, false));
+            copyOH.add(timeSlot);
+            
+            TimeSlot halfTimeSlot = new TimeSlot(   this.getTimeString(i, false),
+                                                    this.getTimeString(i+1, true));
+            copyOH.add(halfTimeSlot);
+        }
+
+    }
+    
+    private String getTimeString(int militaryHour, boolean onHour) {
+        String minutesText = "00";
+        if (!onHour) {
+            minutesText = "30";
+        }
+
+        // FIRST THE START AND END CELLS
+        int hour = militaryHour;
+        if (hour > 12) {
+            hour -= 12;
+        }
+        String cellText = "" + hour + ":" + minutesText;
+        if (militaryHour < 12) {
+            cellText += "am";
+        } else {
+            cellText += "pm";
+        }
+        return cellText;
+    }
+    
+    public TimeSlot getTimeSlotInCopyOH(TimeSlot originalTime){
+        TimeSlot result= null;
+        for(TimeSlot ts: copyOH){
+            if(ts.getStartTime().equals(originalTime.getStartTime())){
+                result= ts;
+                break;
+            }
+        }
+        return result;
+    }
+    
+    //CLEAR THE OH TABLE, AND REEST IT TO "ALL" MODE
+    public void resetOHToMatchTA(OfficeHoursData data, ObservableList<TimeSlot> originalOH){
+        data.resetOfficeHours();
+        ObservableList<TeachingAssistantPrototype> allTheTA= data.getTeachingAssistants();
+        for(TeachingAssistantPrototype t: allTheTA){
+            t.setSlots(0);
+        }
+        for(int i= 0; i<copyOH.size(); i++){   
+            TimeSlot copyTime= copyOH.get(i);
+            TimeSlot originalTime= originalOH.get(i);
+            HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> copyTas= copyTime.getTas();
+
+            for(DayOfWeek d: DayOfWeek.values()){
+                ArrayList<TeachingAssistantPrototype> copyList= copyTas.get(d);
+                for(TeachingAssistantPrototype ta: copyList){
+                    data.addOH(originalTime, ta, d);
+                }
+            }
+        }
+    }
+    
+    //REMOVE THE ITEMS ON THE OH TABLE ACCORDINGLY
+    public void removeOHToMatchTA(OfficeHoursData data, ObservableList<TeachingAssistantPrototype>  allTAs
+                                  ,ObservableList<TimeSlot> originalOH){
+        
+        for(int i= 0; i<copyOH.size(); i++){
+            TimeSlot originalTime= originalOH.get(i);
+            TimeSlot copyTime= copyOH.get(i);
+
+            HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> copyTas= copyTime.getTas();
+            for(DayOfWeek d: DayOfWeek.values()){
+                ArrayList<TeachingAssistantPrototype> copyList= copyTas.get(d);
+                for(TeachingAssistantPrototype ta: copyList){
+                    if(!allTAs.contains(ta)){
+                        data.removeOH(originalTime, ta, d);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * @return the copyOH
+     */
+    public ArrayList <TimeSlot> getCopyOH() {
+        return copyOH;
     }
 }

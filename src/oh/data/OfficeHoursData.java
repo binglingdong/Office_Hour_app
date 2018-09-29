@@ -25,7 +25,7 @@ public class OfficeHoursData implements AppDataComponent {
 
     // NOTE THAT THIS DATA STRUCTURE WILL DIRECTLY STORE THE
     // DATA IN THE ROWS OF THE TABLE VIEW
-    ObservableList<TeachingAssistantPrototype> teachingAssistants;
+    private ObservableList<TeachingAssistantPrototype> teachingAssistants;
 
     ObservableList<TimeSlot> officeHours;
     
@@ -64,7 +64,7 @@ public class OfficeHoursData implements AppDataComponent {
         resetOfficeHours();
     }
     
-    private void resetOfficeHours() {
+    public void resetOfficeHours() {
         //THIS WILL STORE OUR OFFICE HOURS
         AppGUIModule gui = app.getGUIModule();
         TableView<TimeSlot> officeHoursTableView = (TableView)gui.getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
@@ -238,5 +238,12 @@ public class OfficeHoursData implements AppDataComponent {
                 break;
             default:                               
         }
+    }
+
+    /**
+     * @return the teachingAssistants
+     */
+    public ObservableList<TeachingAssistantPrototype> getTeachingAssistants() {
+        return teachingAssistants;
     }
 }
