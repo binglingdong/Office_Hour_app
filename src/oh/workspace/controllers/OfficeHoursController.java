@@ -4,8 +4,6 @@ import djf.modules.AppGUIModule;
 import java.util.regex.Pattern;
 import javafx.scene.control.TextField;
 import oh.OfficeHoursApp;
-import static oh.OfficeHoursPropertyType.OH_NAME_TEXT_FIELD;
-import static oh.OfficeHoursPropertyType.OH_EMAIL_TEXT_FIELD;
 import oh.data.OfficeHoursData;
 import oh.data.TeachingAssistantPrototype;
 import oh.transactions.AddTA_Transaction;
@@ -13,13 +11,10 @@ import djf.ui.dialogs.AppDialogsFacade;
 import static djf.AppPropertyType.INVALID_EMAIL_TITLE;
 import static djf.AppPropertyType.INVALID_EMAIL_CONTENT;
 import java.util.ArrayList;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
-import static oh.OfficeHoursPropertyType.OH_FOOLPROOF_SETTINGS;
-import static oh.OfficeHoursPropertyType.OH_TAS_TABLE_VIEW;
-import static oh.OfficeHoursPropertyType.REPEATING_EMAIL_FOR_ADDING_TA_MESSAGE;
-import static oh.OfficeHoursPropertyType.REPEATING_EMAIL_FOR_ADDING_TA_TITLE;
-import static oh.OfficeHoursPropertyType.REPEATING_NAME_FOR_ADDING_TA_MESSAGE;
-import static oh.OfficeHoursPropertyType.REPEATING_NAME_FOR_ADDING_TA_TITLE;
+import static oh.OfficeHoursPropertyType.*;
+
 
 /**
  *
@@ -33,7 +28,7 @@ public class OfficeHoursController {
         app = initApp;
     }
 
-    public void processAddTA() {
+    public void processAddTA(ArrayList<TeachingAssistantPrototype> copyTAs) {
         
         AppGUIModule gui = app.getGUIModule();
         TextField nameTF = (TextField) gui.getGUINode(OH_NAME_TEXT_FIELD);
@@ -42,20 +37,15 @@ public class OfficeHoursController {
         String email= emailTF.getText();
         
         OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
-        TeachingAssistantPrototype addingTA= data.getTAWithName(name);
-        ArrayList<TeachingAssistantPrototype>  tas=new ArrayList(((TableView)gui.getGUINode(OH_TAS_TABLE_VIEW)).getItems());
-        
+   
         //testing for repeating email
         
         boolean repeatingEmail= false;
         boolean repeatingName =false;
-        for(TeachingAssistantPrototype ta:tas){
+        for(TeachingAssistantPrototype ta:copyTAs){
             if(ta.getEmail().equalsIgnoreCase(email)) repeatingEmail=true; 
             if(ta.getName().equalsIgnoreCase(name)) repeatingName=true;
         }
-        
-        
-        
         
         if(repeatingName){
             AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(),REPEATING_NAME_FOR_ADDING_TA_TITLE,REPEATING_NAME_FOR_ADDING_TA_MESSAGE);
@@ -67,9 +57,18 @@ public class OfficeHoursController {
             Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
             
             if(VALID_EMAIL_ADDRESS_REGEX.matcher(email).matches()){
-                TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email,0);
-                AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta);
+                RadioButton graduate= ((RadioButton)gui.getGUINode(OH_TYPE_GRADUATE));
+                TeachingAssistantPrototype ta;
+                if(graduate.isSelected()){
+                    ta = new TeachingAssistantPrototype(name,email,0,"Graduate");
+                }
+                else{
+                    ta = new TeachingAssistantPrototype(name,email,0,"Undergraduate");
+                }
+
+                AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta, copyTAs);
                 app.processTransaction(addTATransaction);
+                
             }
             else{
                 AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(),INVALID_EMAIL_TITLE, INVALID_EMAIL_CONTENT);

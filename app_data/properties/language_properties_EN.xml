@@ -80,12 +80,18 @@
         <!-- ENGLISH LANGUAGE SETTINGS SPECIFICALLY FOR TDLM CONTROLS -->
 
         <!-- LANGUAGE-DEPENDENT TEXT FOR OH WORKSPACE CONTROLS -->
+        <!--RADIO BUTTONS-->
+        <property name="OH_TYPE_ALL_TEXT"                        value="All"></property>
+        <property name="OH_TYPE_UNDERGRADUATE_TEXT"              value="Undergraduate"></property>
+        <property name="OH_TYPE_GRADUATE_TEXT"                   value="Graduate"></property>
+        
         <property name="OH_TAS_HEADER_LABEL_TEXT"           value="Teaching Assistants"></property>
         <property name="OH_ADD_TA_BUTTON_TEXT"              value="Add TA"></property>
         <property name="OH_OFFICE_HOURS_HEADER_LABEL_TEXT"  value="Office Hours"></property>
         <property name="OH_NAME_TABLE_COLUMN_TEXT"          value="Name"></property>
         <property name="OH_EMAIL_TABLE_COLUMN_TEXT"         value="Email"></property>
         <property name="OH_SLOTS_TABLE_COLUMN_TEXT"         value="Time Slots"></property>
+        <property name="OH_TYPE_TABLE_COLUMN_TEXT"          value="Type"></property>
         <property name="OH_START_TIME_TABLE_COLUMN_TEXT"    value="Start Time"></property>
         <property name="OH_END_TIME_TABLE_COLUMN_TEXT"      value="End Time"></property>
         <property name="OH_MONDAY_TABLE_COLUMN_TEXT"        value="Monday"></property>

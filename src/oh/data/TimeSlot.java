@@ -143,5 +143,12 @@ public class TimeSlot {
         return dayText;
     }
 
+    /**
+     * @param tas the tas to set
+     */
+    public void setTas(HashMap<DayOfWeek, ArrayList<TeachingAssistantPrototype>> tas) {
+        this.tas = tas;
+    }
+
     
 }

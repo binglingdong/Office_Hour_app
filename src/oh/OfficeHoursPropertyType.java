@@ -24,6 +24,7 @@ public enum OfficeHoursPropertyType {
     OH_NAME_TABLE_COLUMN,
     OH_EMAIL_TABLE_COLUMN,
     OH_SLOTS_TABLE_COLUMN,
+    OH_TYPE_TABLE_COLUMN,
 
     OH_ADD_TA_PANE,
     OH_NAME_TEXT_FIELD,

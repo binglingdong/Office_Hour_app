@@ -3,11 +3,13 @@ package oh.workspace.foolproof;
 import djf.modules.AppGUIModule;
 import djf.ui.foolproof.FoolproofDesign;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import oh.OfficeHoursApp;
 import static oh.OfficeHoursPropertyType.OH_ADD_TA_BUTTON;
 import static oh.OfficeHoursPropertyType.OH_EMAIL_TEXT_FIELD;
 import static oh.OfficeHoursPropertyType.OH_NAME_TEXT_FIELD;
+import static oh.OfficeHoursPropertyType.OH_TYPE_ALL;
 import properties_manager.PropertiesManager;
 
 /**
@@ -24,20 +26,29 @@ public class OfficeHoursFoolproofDesign implements FoolproofDesign {
     @Override
     public void updateControls() {
         AppGUIModule gui = app.getGUIModule();
-        enableIfInUse(OH_NAME_TEXT_FIELD,OH_EMAIL_TEXT_FIELD,OH_ADD_TA_BUTTON,true);
+        enableIfInUse();
     }
-    private void enableIfInUse(Object NameField,Object EmailField,Object button, boolean setToDisable) {
+    private void enableIfInUse() {
         AppGUIModule gui = app.getGUIModule();
-        boolean noName=((TextField)gui.getGUINode(NameField)).getText().equals("");
-        boolean noEmail=((TextField)gui.getGUINode(EmailField)).getText().equals("");
-        
-        Button addButton=(Button) gui.getGUINode(button);
-        if(noName||noEmail){
-            addButton.setDisable(setToDisable);
-            
+        TextField Name=(TextField)gui.getGUINode(OH_NAME_TEXT_FIELD);
+        TextField Email=(TextField)gui.getGUINode(OH_EMAIL_TEXT_FIELD);
+        boolean allIsSelected= ((RadioButton)gui.getGUINode(OH_TYPE_ALL)).isSelected();
+        Button addButton=(Button) gui.getGUINode(OH_ADD_TA_BUTTON);
+        if(allIsSelected){
+            addButton.setDisable(true);
+            Name.setDisable(true);
+            Email.setDisable(true);
         }
         else{
-            addButton.setDisable(!setToDisable);
+            Name.setDisable(false);
+            Email.setDisable(false);
+            if(Name.getText().equals("")||Email.getText().equals("")){
+                addButton.setDisable(true);
+
+            }
+            else{
+                addButton.setDisable(false);
+            }
         }
     }
 }

@@ -81,12 +81,19 @@
         <!-- ENGLISH LANGUAGE SETTINGS SPECIFICALLY FOR TDLM CONTROLS -->
 
         <!-- LANGUAGE-DEPENDENT TEXT FOR OH WORKSPACE CONTROLS -->
+        
+        <!--RADIO BUTTONS-->
+        <property name="OH_TYPE_ALL_TEXT"                        value="所有"></property>
+        <property name="OH_TYPE_UNDERGRADUATE_TEXT"              value="本科助教"></property>
+        <property name="OH_TYPE_GRADUATE_TEXT"                   value="研究助教"></property>
+       
         <property name="OH_TAS_HEADER_LABEL_TEXT"           value="助教"></property>
         <property name="OH_ADD_TA_BUTTON_TEXT"              value="添加 TA"></property>
         <property name="OH_OFFICE_HOURS_HEADER_LABEL_TEXT"  value="工作时间"></property>
         <property name="OH_NAME_TABLE_COLUMN_TEXT"          value="姓名"></property>
         <property name="OH_EMAIL_TABLE_COLUMN_TEXT"         value="邮箱"></property>
         <property name="OH_SLOTS_TABLE_COLUMN_TEXT"         value="时间"></property>
+        <property name="OH_TYPE_TABLE_COLUMN_TEXT"          value="类型"></property>
         <property name="OH_START_TIME_TABLE_COLUMN_TEXT"    value="开始时间"></property>
         <property name="OH_END_TIME_TABLE_COLUMN_TEXT"      value="结束时间"></property>
         <property name="OH_MONDAY_TABLE_COLUMN_TEXT"        value="星期一"></property>

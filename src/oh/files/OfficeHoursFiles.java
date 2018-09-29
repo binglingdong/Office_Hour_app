@@ -43,6 +43,7 @@ public class OfficeHoursFiles implements AppFileComponent {
     static final String JSON_UNDERGRAD_TAS = "undergrad_tas";
     static final String JSON_NAME = "name";
     static final String JSON_EMAIL = "email";
+    static final String JSON_TYPE = "type";
     static final String JSON_TIMESLOTS = "time";
     static final String JSON_OFFICE_HOURS = "officeHours";
     static final String JSON_START_HOUR = "startHour";
@@ -80,7 +81,8 @@ public class OfficeHoursFiles implements AppFileComponent {
             JsonObject jsonTA = jsonTAArray.getJsonObject(i);
             String name = jsonTA.getString(JSON_NAME);
             String email= jsonTA.getString(JSON_EMAIL);
-            TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email,0);
+            String type= jsonTA.getString(JSON_TYPE);
+            TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email,0,type);
             dataManager.addTA(ta);
         }
         
@@ -121,7 +123,7 @@ public class OfficeHoursFiles implements AppFileComponent {
         while (tasIterator.hasNext()) {
             TeachingAssistantPrototype ta = tasIterator.next();
 	    JsonObject taJson = Json.createObjectBuilder()
-		    .add(JSON_NAME, ta.getName()).add(JSON_EMAIL,ta.getEmail()).build();
+		    .add(JSON_NAME, ta.getName()).add(JSON_EMAIL,ta.getEmail()).add(JSON_TYPE, ta.getType()).build();
 	    taArrayBuilder.add(taJson);
         }
 	JsonArray undergradTAsArray = taArrayBuilder.build();
