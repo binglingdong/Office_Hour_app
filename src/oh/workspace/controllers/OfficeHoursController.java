@@ -29,51 +29,24 @@ public class OfficeHoursController {
     }
 
     public void processAddTA(ArrayList<TeachingAssistantPrototype> copyTAs, OfficeHoursWorkspace ohws) {
-        
         AppGUIModule gui = app.getGUIModule();
+        OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
         TextField nameTF = (TextField) gui.getGUINode(OH_NAME_TEXT_FIELD);
         String name = nameTF.getText();
         TextField emailTF = (TextField) gui.getGUINode(OH_EMAIL_TEXT_FIELD);
         String email= emailTF.getText();
+        RadioButton graduate= ((RadioButton)gui.getGUINode(OH_TYPE_GRADUATE));
+        TeachingAssistantPrototype ta;
         
-        OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
-   
-        //testing for repeating email
-        
-        boolean repeatingEmail= false;
-        boolean repeatingName =false;
-        for(TeachingAssistantPrototype ta:copyTAs){
-            if(ta.getEmail().equalsIgnoreCase(email)) repeatingEmail=true; 
-            if(ta.getName().equalsIgnoreCase(name)) repeatingName=true;
-        }
-        
-        if(repeatingName){
-            AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(),REPEATING_NAME_FOR_ADDING_TA_TITLE,REPEATING_NAME_FOR_ADDING_TA_MESSAGE);
-        }
-        else if (repeatingEmail){
-            AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(),REPEATING_EMAIL_FOR_ADDING_TA_TITLE,REPEATING_EMAIL_FOR_ADDING_TA_MESSAGE);
+        if(graduate.isSelected()){
+            ta = new TeachingAssistantPrototype(name,email,0,"Graduate");
         }
         else{
-            Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-            
-            if(VALID_EMAIL_ADDRESS_REGEX.matcher(email).matches()){
-                RadioButton graduate= ((RadioButton)gui.getGUINode(OH_TYPE_GRADUATE));
-                TeachingAssistantPrototype ta;
-                if(graduate.isSelected()){
-                    ta = new TeachingAssistantPrototype(name,email,0,"Graduate");
-                }
-                else{
-                    ta = new TeachingAssistantPrototype(name,email,0,"Undergraduate");
-                }
-
-                AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta, copyTAs,ohws);
-                app.processTransaction(addTATransaction);
-                
-            }
-            else{
-                AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(),INVALID_EMAIL_TITLE, INVALID_EMAIL_CONTENT);
-            }
+            ta = new TeachingAssistantPrototype(name,email,0,"Undergraduate");
         }
+
+        AddTA_Transaction addTATransaction = new AddTA_Transaction(data, ta, copyTAs,ohws);
+        app.processTransaction(addTATransaction);
         
         // NOW CLEAR THE TEXT FIELDS
         nameTF.setText("");

@@ -31,6 +31,7 @@ import static oh.workspace.style.OHStyle.*;
 import djf.ui.dialogs.AppDialogsFacade;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ToggleGroup;
 import oh.transactions.AddOH_Transaction;
@@ -217,18 +218,21 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         TextField emailTextField= (TextField)gui.getGUINode(OH_EMAIL_TEXT_FIELD);
         Button addTAButton= (Button) gui.getGUINode(OH_ADD_TA_BUTTON);
         
-        
-       emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-           if(!newValue.equals(oldValue)){
-               app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
-           }           
-       });
+        //Listen to the change made in the text fields. 
+        emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.equals(oldValue)){
+                
+                app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
+            }           
+        });
        
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-           if(!newValue.equals(oldValue)){
-               app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
-           }           
-       });
+            
+            if(!newValue.equals(oldValue)){
+                
+                app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
+            }           
+        });
         
         //update the button after every action. 
         //update the copylist also
@@ -267,7 +271,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         AppGUIModule gui = app.getGUIModule();
         AppFoolproofModule foolproofSettings = app.getFoolproofModule(); //has a hashmap of all the settings
         foolproofSettings.registerModeSettings(OH_FOOLPROOF_SETTINGS,
-                new OfficeHoursFoolproofDesign((OfficeHoursApp) app));
+                new OfficeHoursFoolproofDesign((OfficeHoursApp) app,copyTAs));
     }
 
     @Override
