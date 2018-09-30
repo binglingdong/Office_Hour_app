@@ -121,19 +121,11 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
             if(e.getClickCount()==2){
                 if(data.isTASelected()){
-                    OfficeHoursDialogs.editTADialog(app.getGUIModule().getWindow(), EDIT_TITLE, EDIT_HEADER, taTable, this, app.getFoolproofModule());
-                    
+                    OfficeHoursDialogs.editTADialog(app.getGUIModule().getWindow(), EDIT_TITLE, EDIT_HEADER, taTable, this, app.getFoolproofModule(),app);
                 }
             }
         });
-        
-        
-        
-        
-        
-        
-        
-        
+       
         
         
         ////////-------------------------------RIGHT TABLE------------------------------------////////
@@ -312,29 +304,35 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
     
     //UPDATE THE TA TABLE ACCORDING TO RADIO BUTTON
     public void updateTaTableForRadio(ObservableList<TeachingAssistantPrototype> allTAs){
+        int size= copyTAs.size();
         allTAs.clear();
         if(taTypes.getSelectedToggle()== app.getGUIModule().getGUINode(OH_TYPE_UNDERGRADUATE)){
-            for(TeachingAssistantPrototype a: copyTAs){
+            for(int i=0; i<size; i++){
+                TeachingAssistantPrototype a= copyTAs.get(i);
                 allTAs.add(a);
             }
-            for(TeachingAssistantPrototype a: copyTAs){
+            for(int i=0; i<size; i++){
+                TeachingAssistantPrototype a= copyTAs.get(i);
                 if(a.getType().equals("Graduate")){
                     allTAs.remove(a);
                 }
             }
         }
         else if(taTypes.getSelectedToggle()== app.getGUIModule().getGUINode(OH_TYPE_GRADUATE)){
-            for(TeachingAssistantPrototype a: copyTAs){
+            for(int i=0; i<size; i++){
+                TeachingAssistantPrototype a= copyTAs.get(i);
                 allTAs.add(a);
             }
-            for(TeachingAssistantPrototype a: copyTAs ){
+            for(int i=0; i<size; i++){
+                TeachingAssistantPrototype a= copyTAs.get(i);
                 if(a.getType().equals("Undergraduate")){
                     allTAs.remove(a);
                 }
             }
         }
         else{
-            for(TeachingAssistantPrototype a: copyTAs){
+            for(int i=0; i<size; i++){
+                TeachingAssistantPrototype a= copyTAs.get(i);
                 allTAs.add(a);
             }
         }

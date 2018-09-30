@@ -72,8 +72,8 @@ public class TeachingAssistantPrototype {
         return type.get();
     }
 
-    public void setType(int initType) {
-        slots.set(initType);
+    public void setType(String initType) {
+        type.set(initType);
     }
     
     public StringProperty typeProperty() {

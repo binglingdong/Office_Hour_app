@@ -9,6 +9,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import oh.OfficeHoursApp;
 import static oh.OfficeHoursPropertyType.OH_ADD_TA_BUTTON;
 import static oh.OfficeHoursPropertyType.OH_EMAIL_TEXT_FIELD;
@@ -28,15 +29,22 @@ public class EditingTAFoolproofDesign implements FoolproofDesign {
     Dialog dialog;
     TeachingAssistantPrototype selectedTA;
     ButtonType okButton;
+    ToggleGroup tg;
+    RadioButton under;
+    RadioButton gra;
     
     public EditingTAFoolproofDesign(OfficeHoursWorkspace ohws, TextField nameTf,TextField emailTf, 
-                                    Dialog dialog, TeachingAssistantPrototype selectedTA, ButtonType okButton) {
+                                    Dialog dialog, TeachingAssistantPrototype selectedTA, ButtonType okButton,
+                                    ToggleGroup tg, RadioButton under, RadioButton gra) {
         this.ohws=ohws;
         this.nameTf= nameTf;
         this.emailTf= emailTf;
         this.dialog= dialog;
         this.selectedTA= selectedTA;
         this.okButton=okButton;
+        this.tg= tg;
+        this.under= under;
+        this.gra= gra;
     }
 
     @Override
@@ -49,7 +57,13 @@ public class EditingTAFoolproofDesign implements FoolproofDesign {
         String newEmail= emailTf.getText();
         boolean validName;
         boolean validEmail;
-        
+        RadioButton current= (RadioButton)tg.getSelectedToggle();
+        String newType="";
+        if(current.equals(under)){
+            newType= "Undergraduate";
+        }else newType= "Graduate";
+            
+            
         if(!newName.equals(selectedTA.getName())){
             validName= checkForRepeatedName(newName);
             if(!validName) nameTf.setStyle("-fx-text-fill: red;");
@@ -73,6 +87,9 @@ public class EditingTAFoolproofDesign implements FoolproofDesign {
         
         if(newName.equals(selectedTA.getName())&& newEmail.equals(selectedTA.getEmail())){
             dialog.getDialogPane().lookupButton(okButton).setDisable(true);
+            if(!newType.equals(selectedTA.getType())){
+                dialog.getDialogPane().lookupButton(okButton).setDisable(false);
+            }
         }
         else{
             if(!validName||!validEmail){

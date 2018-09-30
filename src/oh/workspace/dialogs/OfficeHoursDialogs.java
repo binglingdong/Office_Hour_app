@@ -6,10 +6,9 @@
 package oh.workspace.dialogs;
 
 
+import djf.AppTemplate;
 import djf.modules.AppFoolproofModule;
-import djf.modules.AppGUIModule;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -24,8 +23,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import static oh.OfficeHoursPropertyType.*;
-import oh.data.OfficeHoursData;
 import oh.data.TeachingAssistantPrototype;
+import oh.transactions.EditTA_Transaction;
 import oh.workspace.OfficeHoursWorkspace;
 import oh.workspace.foolproof.EditingTAFoolproofDesign;
 import properties_manager.PropertiesManager;
@@ -40,7 +39,7 @@ public class OfficeHoursDialogs {
     //THIS METHOD IS GOING TO CREATE A DIALOG WITH THE SELECTED TA'S INFORMATION. AND ASK FOR THE USER TO TAKE ACTION.
     public static void editTADialog(Stage parent, Object titleProperty, Object headerProperty, 
                                     TableView<TeachingAssistantPrototype> taTable, OfficeHoursWorkspace ohws,
-                                    AppFoolproofModule foolproofSettings){
+                                    AppFoolproofModule foolproofSettings, AppTemplate app){
         
         TeachingAssistantPrototype selectedTA= taTable.getSelectionModel().getSelectedItem();
         PropertiesManager props= PropertiesManager.getPropertiesManager();
@@ -62,18 +61,7 @@ public class OfficeHoursDialogs {
         TextField emailTf= new TextField();
         nameTf.setText(selectedTA.getName());
         emailTf.setText(selectedTA.getEmail());
-        
-        foolproofSettings.registerModeSettings(EDIT_TA_FOOLPROOF_SETTINGS, 
-        new EditingTAFoolproofDesign(ohws,nameTf, emailTf, dialog, selectedTA, okButton));
-
-        nameTf.textProperty().addListener((observable, oldValue, newValue)->{ 
-            foolproofSettings.updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
-        });
-        emailTf.textProperty().addListener((observable, oldValue, newValue)->{
-            foolproofSettings.updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
-        });
        
-        
         RadioButton gra= new RadioButton(props.getProperty(EDIT_TYPE_GRA));
         RadioButton under= new RadioButton(props.getProperty(EDIT_TYPE_UNDER));
         ToggleGroup tg= new ToggleGroup();
@@ -81,8 +69,8 @@ public class OfficeHoursDialogs {
         under.setToggleGroup(tg);
         Label typeLabel= new Label(props.getProperty(EDIT_TYPE));
         
-        if(selectedTA.getType().equals("Undergraduate"))under.setSelected(true);
-        else gra.setSelected(true);
+        if(selectedTA.getType().equals("Graduate"))gra.setSelected(true);
+        else under.setSelected(true);
         
         HBox type= new HBox();
         HBox name= new HBox();
@@ -107,14 +95,36 @@ public class OfficeHoursDialogs {
                                       + "-fx-background-color:SWATCH_NEUTRAL;");
         dialog.getDialogPane().getButtonTypes().addAll(cancelButton, okButton);
         dialog.getDialogPane().lookupButton(okButton).setDisable(true);
+        
+        foolproofSettings.registerModeSettings(EDIT_TA_FOOLPROOF_SETTINGS, 
+        new EditingTAFoolproofDesign(ohws,nameTf, emailTf, dialog, selectedTA, okButton, tg, under, gra));
+
+        nameTf.textProperty().addListener(e->{ 
+            foolproofSettings.updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
+        });
+        emailTf.textProperty().addListener(e->{
+            foolproofSettings.updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
+        });
+        tg.selectedToggleProperty().addListener(e->{
+            foolproofSettings.updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
+        });
+       
+        
         ////////////////////////////////INITALIZED THE DIALOG (TOOK FOREVER =-=)//////////////////////////////////
         Optional<ButtonType> result= dialog.showAndWait();
         if(result.isPresent()){
             if(result.get().equals(okButton)){
-                String newName;
-                String newEmail;
+                String newName = nameTf.getText();
+                String newEmail = emailTf.getText();
                 String newType;
+                RadioButton rb= (RadioButton)tg.getSelectedToggle();
+                if(rb==gra){
+                    newType= "Graduate";
+                }
+                else newType= "Undergraduate";
                 
+                EditTA_Transaction editTATransaction = new EditTA_Transaction(newName, newEmail, newType,selectedTA, taTable, ohws);
+                app.processTransaction(editTATransaction);
                 
             }
         }

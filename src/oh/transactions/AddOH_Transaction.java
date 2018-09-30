@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
 
-    undo和redo还没test。integerproperty要小心
 
  */
 package oh.transactions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import javafx.collections.ObservableList;
 import jtps.jTPS_Transaction;
 import oh.data.OfficeHoursData;
