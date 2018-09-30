@@ -67,16 +67,17 @@
         <property name="ABOUT_CONTENT"          value="OH, the Office Hours Manager - Debugging Enterprises - © 2018"></property>
 
         <!-- INVALID EMAIL OR NAME DIALOG -->
-        <property name= "INVALID_EMAIL_TITLE"   value= "错误邮件地址"></property>
-        <property name= "INVALID_EMAIL_CONTENT" value= "您输入的电子邮件地址无效，请重新输入..."></property>
-        <property name= "OH_MISSING_TA_NAME_OR_EMAIL_MESSAGE" value= "缺失TA姓名或邮箱"></property>
-        <property name= "OH_MISSING_TA_NAME_OR_EMAIL_TITLE_LABEL" value= "缺失资料"></property>
         <property name= "INVALID_COMMAND_TITLE" value= "无效指令"></property>
         <property name= "DIDNT_CHOOSE_TA_INVALID_CLICK_CONTENT" value= "请先选择TA或者双击有效的格子。"></property>
-        <property name= "REPEATING_NAME_FOR_ADDING_TA_TITLE" value= "姓名已存在"></property>
-        <property name= "REPEATING_NAME_FOR_ADDING_TA_MESSAGE" value= "请重新输入TA姓名"></property>
-        <property name= "REPEATING_EMAIL_FOR_ADDING_TA_TITLE" value= "邮箱已存在"></property>
-        <property name= "REPEATING_EMAIL_FOR_ADDING_TA_MESSAGE" value= "请重新输入TA邮箱"></property>
+        <property name= "EDIT_TITLE"                value= "编辑TA"></property>
+        <property name= "EDIT_HEADER"               value= "正在编辑助教"></property>
+        <property name= "EDIT_NAME"                 value= "姓名: "></property>
+        <property name= "EDIT_EMAIL"                value= "电子邮箱: "></property>
+        <property name= "EDIT_TYPE"                 value= "类型: "></property>
+        <property name= "EDIT_TYPE_UNDER"           value= "本科"></property>
+        <property name= "EDIT_TYPE_GRA"             value= "研究"></property>
+        <property name= "EDIT_OK"                   value= "确定"></property>
+        <property name= "EDIT_CANCEL"               value= "取消"></property>
         
         <!-- ENGLISH LANGUAGE SETTINGS SPECIFICALLY FOR TDLM CONTROLS -->
 

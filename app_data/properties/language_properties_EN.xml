@@ -41,49 +41,54 @@
         <property name="ABOUT_BUTTON_TOOLTIP"       value="About"></property>
 
         <!-- NEW FEEDBACK DIALOGS -->	
-        <property name="NEW_SUCCESS_TITLE"      value="New Complete"></property>
-        <property name="NEW_SUCCESS_CONTENT"	value="Work Created but not yet Saved"></property>
-        <property name="NEW_ERROR_TITLE"        value="Warning: Error"></property>
-        <property name="NEW_ERROR_CONTENT"      value="An error occured creating New work."></property>
+        <property name="NEW_SUCCESS_TITLE"          value="New Complete"></property>
+        <property name="NEW_SUCCESS_CONTENT"        value="Work Created but not yet Saved"></property>
+        <property name="NEW_ERROR_TITLE"            value="Warning: Error"></property>
+        <property name="NEW_ERROR_CONTENT"          value="An error occured creating New work."></property>
 
         <!-- LOAD FEEDBACK DIALOGS -->
-        <property name="LOAD_WORK_TITLE"        value="Load Work"></property>
-        <property name="LOAD_SUCCESS_TITLE"     value="Load Complete"></property>
-        <property name="LOAD_SUCCESS_CONTENT"   value="The File has Loaded Successfully and can now be edited."></property>
-        <property name="LOAD_ERROR_TITLE"       value="Loading Error"></property>        
-        <property name="LOAD_ERROR_CONTENT"     value="Loading has Failed. Likely there is a File Formating problem."></property>
+        <property name="LOAD_WORK_TITLE"            value="Load Work"></property>
+        <property name="LOAD_SUCCESS_TITLE"         value="Load Complete"></property>
+        <property name="LOAD_SUCCESS_CONTENT"       value="The File has Loaded Successfully and can now be edited."></property>
+        <property name="LOAD_ERROR_TITLE"           value="Loading Error"></property>        
+        <property name="LOAD_ERROR_CONTENT"         value="Loading has Failed. Likely there is a File Formating problem."></property>
 
         <!-- SAVE FEEDBACK DIALOGS -->
-        <property name="SAVE_WORK_TITLE"        value="Save Work"></property>
-        <property name="SAVE_SUCCESS_TITLE"     value="Save Complete"></property>
-        <property name="SAVE_SUCCESS_CONTENT"   value="The file is saved."></property>
-        <property name="SAVE_ERROR_TITLE"       value="Save Error"></property>
-        <property name="SAVE_ERROR_CONTENT"     value="Saving has Failed. Likely due to a file access problem."></property>
-        <property name="SAVE_VERIFY_TITLE"	value="Save unsaved work?"></property>
-        <property name="SAVE_VERIFY_CONTENT"	value="Would you like to save your unsaved work first?"></property>
+        <property name="SAVE_WORK_TITLE"            value="Save Work"></property>
+        <property name="SAVE_SUCCESS_TITLE"         value="Save Complete"></property>
+        <property name="SAVE_SUCCESS_CONTENT"       value="The file is saved."></property>
+        <property name="SAVE_ERROR_TITLE"           value="Save Error"></property>
+        <property name="SAVE_ERROR_CONTENT"         value="Saving has Failed. Likely due to a file access problem."></property>
+        <property name="SAVE_VERIFY_TITLE"          value="Save unsaved work?"></property>
+        <property name="SAVE_VERIFY_CONTENT"        value="Would you like to save your unsaved work first?"></property>
 
         <!-- ABOUT DIALOG -->
-        <property name="ABOUT_TITLE"            value="About OH"></property>
-        <property name="ABOUT_CONTENT"          value="OH, the Office Hours Manager - Debugging Enterprises - © 2018"></property>
-
+        <property name="ABOUT_TITLE"                value="About OH"></property>
+        <property name="ABOUT_CONTENT"              value="OH, the Office Hours Manager - Debugging Enterprises - © 2018"></property>
+        
         <!-- INVALID DIALOG -->
-        <property name= "INVALID_EMAIL_TITLE"   value= "Invalid Email Address"></property>
-        <property name= "INVALID_EMAIL_CONTENT" value= "The email address you entered is not valid, please re-enter..."></property>
-        <property name= "OH_MISSING_TA_NAME_OR_EMAIL_MESSAGE" value= "Missing name or email"></property>
-        <property name= "OH_MISSING_TA_NAME_OR_EMAIL_TITLE_LABEL" value= "Missing information"></property>
-        <property name= "INVALID_COMMAND_TITLE" value= "Invalid Command"></property>
+        <property name= "INVALID_COMMAND_TITLE"     value= "Invalid Command"></property>
         <property name= "DIDNT_CHOOSE_TA_INVALID_CLICK_CONTENT" value= "Please pick a TA or click the valid cell"></property>
-        <property name= "REPEATING_NAME_FOR_ADDING_TA_TITLE" value= "Name already exist"></property>
-        <property name= "REPEATING_NAME_FOR_ADDING_TA_MESSAGE" value= "Name already exist, please re-enter the name"></property>
-        <property name= "REPEATING_EMAIL_FOR_ADDING_TA_TITLE" value= "Email already exist"></property>
-        <property name= "REPEATING_EMAIL_FOR_ADDING_TA_MESSAGE" value= "Email already exist, please re-enter the email"></property>
+        <property name= "EDIT_TITLE"                value= "Editing TA"></property>
+        <property name= "EDIT_HEADER"               value= "Edit Teaching Assistant"></property>
+        <property name= "EDIT_NAME"                 value= "Name: "></property>
+        <property name= "EDIT_EMAIL"                value= "Email: "></property>
+        <property name= "EDIT_TYPE"                 value= "Type: "></property>
+        <property name= "EDIT_TYPE_UNDER"           value= "Undergraduate"></property>
+        <property name= "EDIT_TYPE_GRA"             value= "Graduate"></property>
+        <property name= "EDIT_OK"                   value= "OK"></property>
+        <property name= "EDIT_CANCEL"               value= "Cancel"></property>
+
+        
+        
+        
         <!-- ENGLISH LANGUAGE SETTINGS SPECIFICALLY FOR TDLM CONTROLS -->
 
         <!-- LANGUAGE-DEPENDENT TEXT FOR OH WORKSPACE CONTROLS -->
         <!--RADIO BUTTONS-->
-        <property name="OH_TYPE_ALL_TEXT"                        value="All"></property>
-        <property name="OH_TYPE_UNDERGRADUATE_TEXT"              value="Undergraduate"></property>
-        <property name="OH_TYPE_GRADUATE_TEXT"                   value="Graduate"></property>
+        <property name="OH_TYPE_ALL_TEXT"                   value="All"></property>
+        <property name="OH_TYPE_UNDERGRADUATE_TEXT"         value="Undergraduate"></property>
+        <property name="OH_TYPE_GRADUATE_TEXT"              value="Graduate"></property>
         
         <property name="OH_TAS_HEADER_LABEL_TEXT"           value="Teaching Assistants"></property>
         <property name="OH_ADD_TA_BUTTON_TEXT"              value="Add TA"></property>

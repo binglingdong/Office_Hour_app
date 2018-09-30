@@ -4,7 +4,6 @@ import djf.modules.AppGUIModule;
 import djf.ui.foolproof.FoolproofDesign;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -14,7 +13,6 @@ import static oh.OfficeHoursPropertyType.OH_EMAIL_TEXT_FIELD;
 import static oh.OfficeHoursPropertyType.OH_NAME_TEXT_FIELD;
 import static oh.OfficeHoursPropertyType.OH_TYPE_ALL;
 import oh.data.TeachingAssistantPrototype;
-import properties_manager.PropertiesManager;
 
 /**
  *

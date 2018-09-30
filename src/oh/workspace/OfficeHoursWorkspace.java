@@ -31,10 +31,14 @@ import static oh.workspace.style.OHStyle.*;
 import djf.ui.dialogs.AppDialogsFacade;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ToggleGroup;
 import oh.transactions.AddOH_Transaction;
+import oh.workspace.dialogs.OfficeHoursDialogs;
 
 /**
  *
@@ -109,9 +113,30 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
      
         // MAKE SURE IT'S THE TABLE THAT ALWAYS GROWS IN THE LEFT PANE
         VBox.setVgrow(taTable, Priority.ALWAYS);
-
+        for (int i = 0; i < taTable.getColumns().size(); i++) {
+            ((TableColumn)taTable.getColumns().get(i)).setSortable(false);
+        }
         
-        ////////-------------------------------INIT THE HEADER ON THE RIGHT------------------------------------////////
+        taTable.setOnMouseClicked(e ->{
+            OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
+            if(e.getClickCount()==2){
+                if(data.isTASelected()){
+                    OfficeHoursDialogs.editTADialog(app.getGUIModule().getWindow(), EDIT_TITLE, EDIT_HEADER, taTable, this, app.getFoolproofModule());
+                    
+                }
+            }
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        ////////-------------------------------RIGHT TABLE------------------------------------////////
         VBox rightPane = ohBuilder.buildVBox(OH_RIGHT_PANE, null, CLASS_OH_PANE, ENABLED);
         HBox officeHoursHeaderBox = ohBuilder.buildHBox(OH_OFFICE_HOURS_HEADER_PANE, rightPane, CLASS_OH_PANE, ENABLED);
         ohBuilder.buildLabel(OH_OFFICE_HOURS_HEADER_LABEL, officeHoursHeaderBox, CLASS_OH_HEADER_LABEL, ENABLED);
@@ -147,37 +172,42 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
 
         // AND PUT EVERYTHING IN THE WORKSPACE
         ((BorderPane)workspace).setCenter(sPane);
+        
           
         
         ///////////////////////////////////////// GENERATES DATA FOR THE OH/////////////////////////////////////
         TableView<TimeSlot> OHTableView = (TableView) app.getGUIModule().getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
-       
+       // OHTableView
         OHTableView.setOnMouseClicked(e->{     
-            TablePosition tp=(TablePosition) officeHoursTable.getSelectionModel().getSelectedCells().get(0);
-            int cellCol= tp.getColumn();
-            int cellRow= tp.getRow();
-            OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
-            boolean validCol= data.isDayOfWeekColumn(cellCol);
+            ObservableList list= officeHoursTable.getSelectionModel().getSelectedCells();
+            if(!list.isEmpty()){
+                TablePosition tp = (TablePosition) list.get(0);
+                int cellCol= tp.getColumn();
+                int cellRow= tp.getRow();
+                OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
+                boolean validCol= data.isDayOfWeekColumn(cellCol);
+
+                // SETUP THE COPYOH IF IS EMPTY (FIRST TIME)
+                if(copyOH.isEmpty()){
+                     initCopyOH(data.getStartHour(),data.getEndHour());
+                }
+                //If the ta is selected
+                if(validCol&& data.isTASelected()){
+                    TeachingAssistantPrototype selectedTA=taTable.getSelectionModel().getSelectedItem();
+                    DayOfWeek day= data.getColumnDayOfWeek(cellCol);
+                    TimeSlot timeSlot = OHTableView.getSelectionModel().getSelectedItem();
+                    TimeSlot copy_timeSlot= getTimeSlotInCopyOH(timeSlot);
+                    //Create a transaction for adding timeslots, and process the transaction
+                    AddOH_Transaction addOH_transaction = new AddOH_Transaction(data,timeSlot,selectedTA ,day, copy_timeSlot,copyOH, OHTableView.getItems(), this);
+                    app.processTransaction(addOH_transaction);
+                }
+                else{
+                    //no TA is selected
+                    AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(),INVALID_COMMAND_TITLE, DIDNT_CHOOSE_TA_INVALID_CLICK_CONTENT);
+                }
+                ((TableView)(app.getGUIModule().getGUINode(OH_OFFICE_HOURS_TABLE_VIEW))).refresh();
+            }
             
-            // SETUP THE COPYOH IF IS EMPTY (FIRST TIME)
-            if(copyOH.isEmpty()){
-                 initCopyOH(data.getStartHour(),data.getEndHour());
-            }
-            //If the ta is selected
-            if(validCol&& data.isTASelected()){
-                TeachingAssistantPrototype selectedTA=taTable.getSelectionModel().getSelectedItem();
-                DayOfWeek day= data.getColumnDayOfWeek(cellCol);
-                TimeSlot timeSlot = OHTableView.getSelectionModel().getSelectedItem();
-                TimeSlot copy_timeSlot= getTimeSlotInCopyOH(timeSlot);
-                //Create a transaction for adding timeslots, and process the transaction
-                AddOH_Transaction addOH_transaction = new AddOH_Transaction(data,timeSlot,selectedTA ,day, copy_timeSlot,copyOH, OHTableView.getItems(), this);
-                app.processTransaction(addOH_transaction);
-            }
-            else{
-                //no TA is selected
-                AppDialogsFacade.showMessageDialog(app.getGUIModule().getWindow(),INVALID_COMMAND_TITLE, DIDNT_CHOOSE_TA_INVALID_CLICK_CONTENT);
-            }
-            ((TableView)(app.getGUIModule().getGUINode(OH_OFFICE_HOURS_TABLE_VIEW))).refresh();
         }); 
         
 
@@ -203,6 +233,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             
             OHTableView.refresh();
         });
+        
     }
 
     
@@ -401,5 +432,12 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
      */
     public ArrayList <TimeSlot> getCopyOH() {
         return copyOH;
+    }
+
+    /**
+     * @return the copyTAs
+     */
+    public ArrayList <TeachingAssistantPrototype> getCopyTAs() {
+        return copyTAs;
     }
 }
