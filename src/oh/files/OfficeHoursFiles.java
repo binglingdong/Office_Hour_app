@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,6 +26,7 @@ import oh.data.OfficeHoursData;
 import oh.data.TeachingAssistantPrototype;
 import oh.data.TimeSlot;
 import oh.data.TimeSlot.DayOfWeek;
+import oh.workspace.OfficeHoursWorkspace;
 
 /**
  * This class serves as the file component for the TA
@@ -41,6 +41,7 @@ public class OfficeHoursFiles implements AppFileComponent {
     
     // THESE ARE USED FOR IDENTIFYING JSON TYPES
     static final String JSON_UNDERGRAD_TAS = "undergrad_tas";
+    static final String JSON_GRAD_TAS= "grad_tas";
     static final String JSON_NAME = "name";
     static final String JSON_EMAIL = "email";
     static final String JSON_TYPE = "type";
@@ -65,8 +66,8 @@ public class OfficeHoursFiles implements AppFileComponent {
 	// CLEAR THE OLD DATA OUT
 	OfficeHoursData dataManager = (OfficeHoursData)data;
         dataManager.reset();
-       
-
+        OfficeHoursWorkspace ohws= (OfficeHoursWorkspace)app.getWorkspaceComponent();
+ 
 	// LOAD THE JSON FILE WITH ALL THE DATA
 	JsonObject json = loadJSONFile(filePath);
 
@@ -76,17 +77,34 @@ public class OfficeHoursFiles implements AppFileComponent {
         dataManager.initHours(startHour, endHour);
 
         // NOW LOAD ALL THE UNDERGRAD TAs
-        JsonArray jsonTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
-        for (int i = 0; i < jsonTAArray.size(); i++) {
-            JsonObject jsonTA = jsonTAArray.getJsonObject(i);
+        ArrayList<TeachingAssistantPrototype> copyTAs= ohws.getCopyTAs();
+//        ArrayList <TimeSlot> copyOH= ohws.getCopyOH();
+        JsonArray jsonUnderTAArray = json.getJsonArray(JSON_UNDERGRAD_TAS);
+        
+        for (int i = 0; i < jsonUnderTAArray.size(); i++) {
+            JsonObject jsonTA = jsonUnderTAArray.getJsonObject(i);
             String name = jsonTA.getString(JSON_NAME);
             String email= jsonTA.getString(JSON_EMAIL);
             String type= jsonTA.getString(JSON_TYPE);
             TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email,0,type);
             dataManager.addTA(ta);
+            if (!copyTAs.contains(ta))copyTAs.add(ta);
+        }
+        
+        JsonArray jsonGradTAArray = json.getJsonArray(JSON_GRAD_TAS);
+        for (int i = 0; i < jsonGradTAArray.size(); i++) {
+            JsonObject jsonTA = jsonGradTAArray.getJsonObject(i);
+            String name = jsonTA.getString(JSON_NAME);
+            String email= jsonTA.getString(JSON_EMAIL);
+            String type= jsonTA.getString(JSON_TYPE);
+            TeachingAssistantPrototype ta = new TeachingAssistantPrototype(name,email,0,type);
+            dataManager.addTA(ta);
+            if (!copyTAs.contains(ta))copyTAs.add(ta);
         }
         
         JsonArray jsonOHArray= json.getJsonArray(JSON_OFFICE_HOURS);
+        ohws.initCopyOH(Integer.parseInt(startHour), Integer.parseInt(endHour));
+        
         for(int i=0; i<jsonOHArray.size();i++){
             JsonObject jsonOH= jsonOHArray.getJsonObject(i);
             String time= jsonOH.getString(JSON_TIMESLOTS);
@@ -94,12 +112,17 @@ public class OfficeHoursFiles implements AppFileComponent {
             String name= jsonOH.getString(JSON_NAME);
             
             TeachingAssistantPrototype ta= dataManager.getTAWithName(name);
-            
             TimeSlot slots= dataManager.getTimeSlot(time);
             dataManager.addOH(slots, ta, DayOfWeek.valueOf(day));
+            
+            TimeSlot copyTime= ohws.getTimeSlotInCopyOH(slots);
+            ArrayList<TeachingAssistantPrototype> taListForThatDay_Copy= copyTime.getTas().get(DayOfWeek.valueOf(day));
+            taListForThatDay_Copy.add(ta);
         }
         
-        
+        ohws.updateTaTableForRadio(dataManager.getTeachingAssistants());
+        ohws.resetOHToMatchTA(dataManager,dataManager.getOfficeHours());
+        ohws.removeOHToMatchTA(dataManager, dataManager.getTeachingAssistants(), dataManager.getOfficeHours());
     }
       
     // HELPER METHOD FOR LOADING DATA FROM A JSON FORMAT
@@ -114,23 +137,29 @@ public class OfficeHoursFiles implements AppFileComponent {
 
     @Override
     public void saveData(AppDataComponent data, String filePath) throws IOException {
+         OfficeHoursWorkspace ohws= (OfficeHoursWorkspace)app.getWorkspaceComponent();
 	// GET THE DATA
 	OfficeHoursData dataManager = (OfficeHoursData)data;
 
 	// NOW BUILD THE TA JSON OBJCTS TO SAVE
-	JsonArrayBuilder taArrayBuilder = Json.createArrayBuilder();//that is the content of the array
-	Iterator<TeachingAssistantPrototype> tasIterator = dataManager.teachingAssistantsIterator();
-        while (tasIterator.hasNext()) {
-            TeachingAssistantPrototype ta = tasIterator.next();
-	    JsonObject taJson = Json.createObjectBuilder()
-		    .add(JSON_NAME, ta.getName()).add(JSON_EMAIL,ta.getEmail()).add(JSON_TYPE, ta.getType()).build();
-	    taArrayBuilder.add(taJson);
+	JsonArrayBuilder underTaArrayBuilder = Json.createArrayBuilder();//that is the content of the array
+        JsonArrayBuilder gradTaArrayBuilder= Json.createArrayBuilder();
+	ArrayList<TeachingAssistantPrototype> tasIterator = ohws.getCopyTAs();
+        for (TeachingAssistantPrototype ta: tasIterator){
+            JsonObject taJson = Json.createObjectBuilder()
+                .add(JSON_NAME, ta.getName()).add(JSON_EMAIL,ta.getEmail()).add(JSON_TYPE, ta.getType()).build();
+            
+            if(ta.getType().equals("Undergraduate")){
+                underTaArrayBuilder.add(taJson);
+            }
+            else gradTaArrayBuilder.add(taJson);
         }
-	JsonArray undergradTAsArray = taArrayBuilder.build();
+	JsonArray undergradTAsArray = underTaArrayBuilder.build();
+        JsonArray gradTAsArray = gradTaArrayBuilder.build();
 
         //DO THE SAME THING FOR THE OFFICE HOURS
         JsonArrayBuilder OHArrayBuilder= Json.createArrayBuilder();
-        Iterator<TimeSlot> OHIterator= dataManager.officeHoursIterator();
+        Iterator<TimeSlot> OHIterator= ohws.getCopyOH().iterator();
         while(OHIterator.hasNext()){
             TimeSlot time= OHIterator.next();
             HashMap allTheTAsForTheTime= time.getTas();  //for that time slot
@@ -139,7 +168,7 @@ public class OfficeHoursFiles implements AppFileComponent {
                 for(TeachingAssistantPrototype ta: listOfTa){
                     
                     JsonObject timeJson= Json.createObjectBuilder().add(JSON_START_TIME,time.getStartTime().replace(":", "_"))
-                            .add(JSON_DAY_OF_WEEK,day.toString()).add(JSON_NAME, ta.getName())
+                            .add(JSON_DAY_OF_WEEK,day.toString()).add(JSON_NAME, ta.getName()).add(JSON_TYPE, ta.getType())
                             .build();
                     OHArrayBuilder.add(timeJson);
                 }
@@ -152,6 +181,7 @@ public class OfficeHoursFiles implements AppFileComponent {
 		.add(JSON_START_HOUR, "" + dataManager.getStartHour())
 		.add(JSON_END_HOUR, "" + dataManager.getEndHour())
                 .add(JSON_UNDERGRAD_TAS, undergradTAsArray)
+                .add(JSON_GRAD_TAS, gradTAsArray)
                 .add(JSON_OFFICE_HOURS, officeHour)
 		.build();
 	

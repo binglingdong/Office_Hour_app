@@ -23,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import static oh.OfficeHoursPropertyType.*;
+import oh.data.OfficeHoursData;
 import oh.data.TeachingAssistantPrototype;
 import oh.transactions.EditTA_Transaction;
 import oh.workspace.OfficeHoursWorkspace;
@@ -38,8 +39,7 @@ public class OfficeHoursDialogs {
     
     //THIS METHOD IS GOING TO CREATE A DIALOG WITH THE SELECTED TA'S INFORMATION. AND ASK FOR THE USER TO TAKE ACTION.
     public static void editTADialog(Stage parent, Object titleProperty, Object headerProperty, 
-                                    TableView<TeachingAssistantPrototype> taTable, OfficeHoursWorkspace ohws,
-                                    AppFoolproofModule foolproofSettings, AppTemplate app){
+                                    TableView<TeachingAssistantPrototype> taTable, OfficeHoursWorkspace ohws,AppTemplate app){
         
         TeachingAssistantPrototype selectedTA= taTable.getSelectionModel().getSelectedItem();
         PropertiesManager props= PropertiesManager.getPropertiesManager();
@@ -96,20 +96,20 @@ public class OfficeHoursDialogs {
         dialog.getDialogPane().getButtonTypes().addAll(cancelButton, okButton);
         dialog.getDialogPane().lookupButton(okButton).setDisable(true);
         
-        foolproofSettings.registerModeSettings(EDIT_TA_FOOLPROOF_SETTINGS, 
+        app.getFoolproofModule().registerModeSettings(EDIT_TA_FOOLPROOF_SETTINGS, 
         new EditingTAFoolproofDesign(ohws,nameTf, emailTf, dialog, selectedTA, okButton, tg, under, gra));
 
         nameTf.textProperty().addListener(e->{ 
-            foolproofSettings.updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
+            app.getFoolproofModule().updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
         });
         emailTf.textProperty().addListener(e->{
-            foolproofSettings.updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
+            app.getFoolproofModule().updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
         });
         tg.selectedToggleProperty().addListener(e->{
-            foolproofSettings.updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
+            app.getFoolproofModule().updateControls(EDIT_TA_FOOLPROOF_SETTINGS);
         });
        
-        
+        OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
         ////////////////////////////////INITALIZED THE DIALOG (TOOK FOREVER =-=)//////////////////////////////////
         Optional<ButtonType> result= dialog.showAndWait();
         if(result.isPresent()){
@@ -123,7 +123,7 @@ public class OfficeHoursDialogs {
                 }
                 else newType= "Undergraduate";
                 
-                EditTA_Transaction editTATransaction = new EditTA_Transaction(newName, newEmail, newType,selectedTA, taTable, ohws);
+                EditTA_Transaction editTATransaction = new EditTA_Transaction(newName, newEmail, newType,selectedTA, taTable, ohws,data);
                 app.processTransaction(editTATransaction);
                 
             }

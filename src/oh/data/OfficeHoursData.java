@@ -10,6 +10,7 @@ import oh.OfficeHoursApp;
 import static oh.OfficeHoursPropertyType.OH_OFFICE_HOURS_TABLE_VIEW;
 import static oh.OfficeHoursPropertyType.OH_TAS_TABLE_VIEW;
 import oh.data.TimeSlot.DayOfWeek;
+import oh.workspace.OfficeHoursWorkspace;
 
 /**
  * This is the data component for TAManagerApp. It has all the data needed
@@ -27,7 +28,7 @@ public class OfficeHoursData implements AppDataComponent {
     // DATA IN THE ROWS OF THE TABLE VIEW
     private ObservableList<TeachingAssistantPrototype> teachingAssistants;
 
-    ObservableList<TimeSlot> officeHours;
+    private ObservableList<TimeSlot> officeHours;
     
 
     // THESE ARE THE TIME BOUNDS FOR THE OFFICE HOURS GRID. NOTE
@@ -123,12 +124,13 @@ public class OfficeHoursData implements AppDataComponent {
         startHour = MIN_START_HOUR;
         endHour = MAX_END_HOUR;
         teachingAssistants.clear();
-       
-        
+        ((OfficeHoursWorkspace)app.getWorkspaceComponent()).getCopyTAs().clear();
+
         for (int i = 0; i < officeHours.size(); i++) {
             TimeSlot timeSlot = officeHours.get(i);
             timeSlot.reset();
         }
+        ((OfficeHoursWorkspace)app.getWorkspaceComponent()).getCopyOH().clear();
     }
     
     // ACCESSOR METHODS
@@ -246,4 +248,12 @@ public class OfficeHoursData implements AppDataComponent {
     public ObservableList<TeachingAssistantPrototype> getTeachingAssistants() {
         return teachingAssistants;
     }
+
+    /**
+     * @return the officeHours
+     */
+    public ObservableList<TimeSlot> getOfficeHours() {
+        return officeHours;
+    }
+    
 }

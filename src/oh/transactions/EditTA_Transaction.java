@@ -7,6 +7,7 @@ package oh.transactions;
 
 import javafx.scene.control.TableView;
 import jtps.jTPS_Transaction;
+import oh.data.OfficeHoursData;
 import oh.data.TeachingAssistantPrototype;
 import oh.workspace.OfficeHoursWorkspace;
 
@@ -21,22 +22,25 @@ public class EditTA_Transaction implements jTPS_Transaction {
     OfficeHoursWorkspace ohws;
     TeachingAssistantPrototype selectedTA;
     TableView<TeachingAssistantPrototype> taTable;
+    OfficeHoursData data;
     String oriName;
     String oriEmail;
     String oriType;
     
     public EditTA_Transaction(String newName, String newEmail, String newType, 
                               TeachingAssistantPrototype selectedTA,TableView<TeachingAssistantPrototype> taTable,
-                              OfficeHoursWorkspace ohws ){
+                              OfficeHoursWorkspace ohws, OfficeHoursData data){
         this.newEmail= newEmail;
         this.newName= newName;
         this.newType= newType;
         this.selectedTA= selectedTA;
         this.taTable=taTable;
         this.ohws=ohws;
+        this.data= data;
         oriName= selectedTA.getName();
         oriEmail= selectedTA.getEmail();
         oriType= selectedTA.getType();
+        
     }
     
     @Override
@@ -45,6 +49,8 @@ public class EditTA_Transaction implements jTPS_Transaction {
         selectedTA.setEmail(newEmail);
         selectedTA.setType(newType);
         ohws.updateTaTableForRadio(taTable.getItems());
+        ohws.resetOHToMatchTA(data,data.getOfficeHours());
+        ohws.removeOHToMatchTA(data, taTable.getItems(), data.getOfficeHours());
     }
 
     @Override
@@ -53,6 +59,8 @@ public class EditTA_Transaction implements jTPS_Transaction {
         selectedTA.setEmail(oriEmail);
         selectedTA.setName(oriName);
         ohws.updateTaTableForRadio(taTable.getItems());
+        ohws.resetOHToMatchTA(data,data.getOfficeHours());
+        ohws.removeOHToMatchTA(data, taTable.getItems(), data.getOfficeHours());
     }
     
 }

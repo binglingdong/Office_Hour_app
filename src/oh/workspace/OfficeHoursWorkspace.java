@@ -31,11 +31,7 @@ import static oh.workspace.style.OHStyle.*;
 import djf.ui.dialogs.AppDialogsFacade;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
-import java.util.regex.Pattern;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.ToggleGroup;
 import oh.transactions.AddOH_Transaction;
 import oh.workspace.dialogs.OfficeHoursDialogs;
@@ -121,7 +117,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
             if(e.getClickCount()==2){
                 if(data.isTASelected()){
-                    OfficeHoursDialogs.editTADialog(app.getGUIModule().getWindow(), EDIT_TITLE, EDIT_HEADER, taTable, this, app.getFoolproofModule(),app);
+                    OfficeHoursDialogs.editTADialog(app.getGUIModule().getWindow(), EDIT_TITLE, EDIT_HEADER, taTable, this,app);
                 }
             }
         });
@@ -374,14 +370,12 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
     }
     
     public TimeSlot getTimeSlotInCopyOH(TimeSlot originalTime){
-        TimeSlot result= null;
         for(TimeSlot ts: copyOH){
             if(ts.getStartTime().equals(originalTime.getStartTime())){
-                result= ts;
-                break;
+                return ts;
             }
         }
-        return result;
+        return null;
     }
     
     //CLEAR THE OH TABLE, AND REEST IT TO "ALL" MODE
@@ -406,7 +400,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
     }
     
     //REMOVE THE ITEMS ON THE OH TABLE ACCORDINGLY
-    public void removeOHToMatchTA(OfficeHoursData data, ObservableList<TeachingAssistantPrototype>  allTAs
+    public void removeOHToMatchTA(OfficeHoursData data, ObservableList<TeachingAssistantPrototype>  currentTAs
                                   ,ObservableList<TimeSlot> originalOH){
         
         for(int i= 0; i<copyOH.size(); i++){
@@ -417,7 +411,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             for(DayOfWeek d: DayOfWeek.values()){
                 ArrayList<TeachingAssistantPrototype> copyList= copyTas.get(d);
                 for(TeachingAssistantPrototype ta: copyList){
-                    if(!allTAs.contains(ta)){
+                    if(!currentTAs.contains(ta)){
                         data.removeOH(originalTime, ta, d);
                     }
                 }
