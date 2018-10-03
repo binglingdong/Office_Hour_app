@@ -24,14 +24,16 @@ public class PasteTA_Transaction implements jTPS_Transaction {
     TeachingAssistantPrototype newTA;
     int copyIforName;
     int copyJforEmail;
+    int index;
 
     public PasteTA_Transaction(TeachingAssistantPrototype selectedTA,OfficeHoursWorkspace ohws,OfficeHoursData data
-                               , ArrayList<Integer> numberOfPasteForName, ArrayList<Integer> numberOfPasteForEmail){
+                               , ArrayList<Integer> numberOfPasteForName, ArrayList<Integer> numberOfPasteForEmail, int index){
         this.TAToBePasted= selectedTA;
         this.ohws= ohws;
         this.data= data;
         this.numberOfPastesForName= numberOfPasteForName;
         this.numberOfPastesForEmail= numberOfPasteForEmail;
+        this.index= index;
     }
     
     @Override
@@ -48,16 +50,16 @@ public class PasteTA_Transaction implements jTPS_Transaction {
             allEmails.add(ta.getEmail());
         }
         
-        copyIforName=numberOfPastesForName.get(numberOfPastesForName.size()-1);       //keeps a copy for undo
-        int i=numberOfPastesForName.get(numberOfPastesForName.size()-1);          //get the number of pastes of the last ta.
+        
+        copyIforName=numberOfPastesForName.get(index);       //keeps a copy for undo
+        int i=numberOfPastesForName.get(index);          //get the number of pastes of the last ta.
         while(allNames.contains(name)){
             name= TAToBePasted.getName()+i;
             i=i+1;
         }
-         
-        numberOfPastesForName.remove(numberOfPastesForName.size()-1);       //add the number of pastes for the next paste. 
-        numberOfPastesForName.add(i);
         
+        numberOfPastesForName.set(index, i);      //add the number of pastes for the next paste. 
+
         
         copyJforEmail=numberOfPastesForEmail.get(numberOfPastesForEmail.size()-1);       //keeps a copy for undo
         int j=numberOfPastesForEmail.get(numberOfPastesForEmail.size()-1);          //get the number of pastes of the last ta.
@@ -69,8 +71,7 @@ public class PasteTA_Transaction implements jTPS_Transaction {
             j=j+1;
         }
          
-        numberOfPastesForEmail.remove(numberOfPastesForEmail.size()-1);       //add the number of pastes for the next paste. 
-        numberOfPastesForEmail.add(j);
+        numberOfPastesForEmail.set(index, j);       //add the number of pastes for the next paste. 
 
         newTA= new TeachingAssistantPrototype(name,email,0,type);
         ohws.getCopyTAs().add(newTA);
@@ -79,12 +80,9 @@ public class PasteTA_Transaction implements jTPS_Transaction {
 
     @Override
     public void undoTransaction() {
-        ohws.getCopyTAs().remove(newTA);
-        numberOfPastesForName.remove(numberOfPastesForName.size()-1);       //subtract the number of pastes for the next paste. 
-        numberOfPastesForName.add(copyIforName);
-        
-        numberOfPastesForEmail.remove(numberOfPastesForEmail.size()-1);
-        numberOfPastesForEmail.add(copyJforEmail);
+        ohws.getCopyTAs().remove(newTA);       //subtract the number of pastes for the next paste. 
+        numberOfPastesForName.set(index, copyIforName);
+        numberOfPastesForEmail.set(index, copyJforEmail);
 
         ohws.updateTaTableForRadio(data.getTeachingAssistants());
     }

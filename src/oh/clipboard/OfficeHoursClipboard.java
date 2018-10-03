@@ -56,8 +56,9 @@ public class OfficeHoursClipboard implements AppClipboardComponent {
         OfficeHoursWorkspace ohws= (OfficeHoursWorkspace)app.getWorkspaceComponent();
         OfficeHoursData data= (OfficeHoursData)app.getDataComponent();
         //get the last ta in the clipboard
-        TeachingAssistantPrototype taInClipboard= clipboardCutAndCopiedItems.get(clipboardCutAndCopiedItems.size()-1);
-        PasteTA_Transaction pasteTATransaction= new PasteTA_Transaction(taInClipboard,ohws,data,numberOfPastesForName,numberOfPastesForEmail);
+        int index= clipboardCutAndCopiedItems.size()-1;
+        TeachingAssistantPrototype taInClipboard= clipboardCutAndCopiedItems.get(index);
+        PasteTA_Transaction pasteTATransaction= new PasteTA_Transaction(taInClipboard,ohws,data,numberOfPastesForName,numberOfPastesForEmail,index);
         app.processTransaction(pasteTATransaction);
     }    
 
