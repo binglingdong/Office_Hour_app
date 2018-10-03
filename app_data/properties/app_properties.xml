@@ -35,7 +35,7 @@
         <property name="HAS_SAVE_AS"            value="false"></property>
         <property name="HAS_EXPORT"             value="false"></property>
         <property name="HAS_EXIT"               value="true"></property>
-        <property name="HAS_CLIPBOARD_TOOLBAR"  value="false"></property>
+        <property name="HAS_CLIPBOARD_TOOLBAR"  value="true"></property>
         <property name="HAS_UNDO_TOOLBAR"       value="true"></property>
         <property name="HAS_HELP_TOOLBAR"       value="true"></property>
         <property name="HAS_HELP"               value="true"></property>
@@ -56,7 +56,10 @@
         <!-- PROGRAM ICON FILES - FILE TOOLBAR -->        
         <property name="LANGUAGE_BUTTON_ICON"   value="Language.png"></property>
         <property name="HELP_BUTTON_ICON"       value="Help.png"></property>
-
+        <!-- PROGRAM ICON FILES - FILE CUT/COPY/PASTE -->
+        <property name="CUT_BUTTON_ICON"   value="Cut.png"></property>
+        <property name="COPY_BUTTON_ICON"       value="Copy.png"></property>
+        <property name="PASTE_BUTTON_ICON"       value="Paste.png"></property>
         <!-- OH BUTTONS TOOLBAR -->
         
         <!-- THIS IS THE FILE WE'LL USE TO MAKE OUR EXPORTED WEB FILE -->

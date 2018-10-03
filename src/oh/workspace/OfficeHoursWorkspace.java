@@ -1,5 +1,6 @@
 package oh.workspace;
 
+import static djf.AppPropertyType.APP_CLIPBOARD_FOOLPROOF_SETTINGS;
 import djf.components.AppWorkspaceComponent;
 import djf.modules.AppFoolproofModule;
 import djf.modules.AppGUIModule;
@@ -115,11 +116,15 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         
         taTable.setOnMouseClicked(e ->{
             OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
+            if(data.isTASelected()){
+                
+            }
             if(e.getClickCount()==2){
                 if(data.isTASelected()){
                     OfficeHoursDialogs.editTADialog(app.getGUIModule().getWindow(), EDIT_TITLE, EDIT_HEADER, taTable, this,app);
                 }
             }
+            app.getFoolproofModule().updateControls(APP_CLIPBOARD_FOOLPROOF_SETTINGS);
         });
        
         
@@ -166,7 +171,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         ///////////////////////////////////////// GENERATES DATA FOR THE OH/////////////////////////////////////
         TableView<TimeSlot> OHTableView = (TableView) app.getGUIModule().getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
        // OHTableView
-        OHTableView.setOnMouseClicked(e->{     
+        OHTableView.setOnMouseClicked(e->{
             ObservableList list= officeHoursTable.getSelectionModel().getSelectedCells();
             if(!list.isEmpty()){
                 TablePosition tp = (TablePosition) list.get(0);
@@ -195,7 +200,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
                 }
                 ((TableView)(app.getGUIModule().getGUINode(OH_OFFICE_HOURS_TABLE_VIEW))).refresh();
             }
-            
+            app.getFoolproofModule().updateControls(APP_CLIPBOARD_FOOLPROOF_SETTINGS);
         }); 
         
 
@@ -215,9 +220,9 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             //After they updated the taTable on the left
             //first reset the originalOH to copyOH
             resetOHToMatchTA(data,originalOH);
-            
             //remove the ones that are not in the ta list. 
             removeOHToMatchTA(data,allTAs,originalOH);
+            app.getFoolproofModule().updateControls(APP_CLIPBOARD_FOOLPROOF_SETTINGS);
             
             OHTableView.refresh();
         });
