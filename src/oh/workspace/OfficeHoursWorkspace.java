@@ -33,6 +33,7 @@ import djf.ui.dialogs.AppDialogsFacade;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.ToggleGroup;
 import oh.transactions.AddOH_Transaction;
 import oh.workspace.dialogs.OfficeHoursDialogs;
@@ -45,6 +46,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
     private ArrayList <TeachingAssistantPrototype> copyTAs= new ArrayList<>();
     private ArrayList <TimeSlot> copyOH= new ArrayList<>();
     private ToggleGroup taTypes= new ToggleGroup();
+    private ArrayList <TableColumn> tableColumns= new ArrayList<>();
 
     public OfficeHoursWorkspace(OfficeHoursApp app) {
         super(app);
@@ -117,7 +119,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         taTable.setOnMouseClicked(e ->{
             OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
             if(data.isTASelected()){
-                
+                updateBgColorForCell();
             }
             if(e.getClickCount()==2){
                 if(data.isTASelected()){
@@ -153,7 +155,11 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         for (int i = 0; i < officeHoursTable.getColumns().size(); i++) {
             ((TableColumn)officeHoursTable.getColumns().get(i)).prefWidthProperty().bind(officeHoursTable.widthProperty().multiply(1.0/7.0));
         }
-       
+        tableColumns.add(mondayColumn);
+        tableColumns.add(tuesdayColumn);
+        tableColumns.add(wednesdayColumn);
+        tableColumns.add(thursdayColumn);
+        tableColumns.add(fridayColumn);
         
         // MAKE SURE IT'S THE TABLE THAT ALWAYS GROWS IN THE LEFT PANE
         VBox.setVgrow(officeHoursTable, Priority.ALWAYS);
@@ -225,6 +231,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             app.getFoolproofModule().updateControls(APP_CLIPBOARD_FOOLPROOF_SETTINGS);
             
             OHTableView.refresh();
+            updateBgColorForCell();
         });
         
     }
@@ -423,6 +430,39 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             }
         }
     }
+    
+    public void updateBgColorForCell(){
+        TableView<TeachingAssistantPrototype> taTable = (TableView) app.getGUIModule().getGUINode(OH_TAS_TABLE_VIEW);
+        TeachingAssistantPrototype selectedTA= taTable.getSelectionModel().getSelectedItem();
+        for(TableColumn tc :tableColumns){
+            tc.setCellFactory(e->new TableCell<ObservableList<String>, String>(){
+                @Override
+                public void updateItem(String item, boolean empty) {
+                // Always invoke super constructor.
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        
+                    } else {
+                        if(selectedTA==null){
+                            setText(item);
+                            this.setStyle("");
+                        }
+                        else{
+                            setText(item);
+                            if (getText().contains(selectedTA.getName())) {
+                                this.setStyle("-fx-background-color: lightGreen;");
+                            }
+                            else {
+                                this.setStyle("");
+                            }
+                        }
+                    }
+                }
+            } );
+        }
+    }
+    
     
     /**
      * @return the copyOH

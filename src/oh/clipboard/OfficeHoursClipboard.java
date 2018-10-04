@@ -20,6 +20,7 @@ public class OfficeHoursClipboard implements AppClipboardComponent {
     ArrayList<TeachingAssistantPrototype> clipboardCutAndCopiedItems;
     ArrayList<Integer> numberOfPastesForName= new ArrayList<>();                       //assigns the number behind the name pastedName
     ArrayList<Integer> numberOfPastesForEmail= new ArrayList<>();
+   
     
     public OfficeHoursClipboard(OfficeHoursApp initApp) {
         app = initApp;

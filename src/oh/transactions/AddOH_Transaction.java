@@ -80,5 +80,6 @@ public class AddOH_Transaction implements jTPS_Transaction {
         }        
         ohws.resetOHToMatchTA(data, originalOH);
         ohws.removeOHToMatchTA(data, data.getTeachingAssistants(), originalOH);
+        ohws.updateBgColorForCell();
     }
 }

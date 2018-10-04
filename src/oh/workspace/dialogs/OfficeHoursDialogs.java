@@ -7,7 +7,6 @@ package oh.workspace.dialogs;
 
 
 import djf.AppTemplate;
-import djf.modules.AppFoolproofModule;
 import java.util.Optional;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar;

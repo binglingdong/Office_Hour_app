@@ -1,15 +1,11 @@
 package oh.workspace.controllers;
 
 import djf.modules.AppGUIModule;
-import java.util.regex.Pattern;
 import javafx.scene.control.TextField;
 import oh.OfficeHoursApp;
 import oh.data.OfficeHoursData;
 import oh.data.TeachingAssistantPrototype;
 import oh.transactions.AddTA_Transaction;
-import djf.ui.dialogs.AppDialogsFacade;
-import static djf.AppPropertyType.INVALID_EMAIL_TITLE;
-import static djf.AppPropertyType.INVALID_EMAIL_CONTENT;
 import java.util.ArrayList;
 import javafx.scene.control.RadioButton;
 import static oh.OfficeHoursPropertyType.*;

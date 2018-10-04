@@ -57,6 +57,7 @@ public class CutTA_Transaction implements jTPS_Transaction{
         }
         ohws.resetOHToMatchTA(data, data.getOfficeHours());
         ohws.removeOHToMatchTA(data, data.getTeachingAssistants(), data.getOfficeHours());
+        ohws.updateBgColorForCell();
     }
 
     @Override
@@ -71,6 +72,7 @@ public class CutTA_Transaction implements jTPS_Transaction{
         removedDay.clear();
         ohws.resetOHToMatchTA(data, data.getOfficeHours());
         ohws.removeOHToMatchTA(data, data.getTeachingAssistants(), data.getOfficeHours());
+        ohws.updateBgColorForCell();
     }
     
 }
