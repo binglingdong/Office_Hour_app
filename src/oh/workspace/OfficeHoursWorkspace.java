@@ -112,9 +112,6 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
      
         // MAKE SURE IT'S THE TABLE THAT ALWAYS GROWS IN THE LEFT PANE
         VBox.setVgrow(taTable, Priority.ALWAYS);
-        for (int i = 0; i < taTable.getColumns().size(); i++) {
-            ((TableColumn)taTable.getColumns().get(i)).setSortable(false);
-        }
         
         taTable.setOnMouseClicked(e ->{
             OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
@@ -252,15 +249,12 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
         //Listen to the change made in the text fields. 
         emailTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if(!newValue.equals(oldValue)){
-                
                 app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
             }           
         });
        
         nameTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            
             if(!newValue.equals(oldValue)){
-                
                 app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
             }           
         });
@@ -450,11 +444,16 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
                         }
                         else{
                             setText(item);
-                            if (getText().contains(selectedTA.getName())) {
-                                this.setStyle("-fx-background-color: lightGreen;");
-                            }
-                            else {
-                                this.setStyle("");
+                            if(getText().equals("")) this.setStyle("");
+                            else{
+                                String[] arr= getText().split("\n");
+                                for(String s: arr){
+                                    if(s.equals(selectedTA.getName())){
+                                        this.setStyle("-fx-background-color: lightGreen;");
+                                        break;
+                                    }
+                                    else this.setStyle(""); 
+                                }
                             }
                         }
                     }
@@ -462,7 +461,6 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             } );
         }
     }
-    
     
     /**
      * @return the copyOH
