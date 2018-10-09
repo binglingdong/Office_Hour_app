@@ -31,7 +31,10 @@ import oh.workspace.foolproof.OfficeHoursFoolproofDesign;
 import static oh.workspace.style.OHStyle.*;
 import djf.ui.dialogs.AppDialogsFacade;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.ToggleGroup;
@@ -112,6 +115,10 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
      
         // MAKE SURE IT'S THE TABLE THAT ALWAYS GROWS IN THE LEFT PANE
         VBox.setVgrow(taTable, Priority.ALWAYS);
+ 
+        for (int i = 0; i < taTable.getColumns().size(); i++) {
+             ((TableColumn)taTable.getColumns().get(i)).setSortable(false);
+         }
         
         taTable.setOnMouseClicked(e ->{
             OfficeHoursData data=(OfficeHoursData)app.getDataComponent();
@@ -279,7 +286,7 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
             app.getFoolproofModule().updateControls(OH_FOOLPROOF_SETTINGS);
             controller.processAddTA(copyTAs, this);
         });
-     
+        
         
         TableView officeHoursTableView = (TableView) gui.getGUINode(OH_OFFICE_HOURS_TABLE_VIEW);
         // DON'T LET ANYONE SORT THE TABLES
@@ -293,7 +300,6 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
     
 //This initiazes the fool proof for the workplace pane.
     private void initFoolproofDesign() {
-        AppGUIModule gui = app.getGUIModule();
         AppFoolproofModule foolproofSettings = app.getFoolproofModule(); //has a hashmap of all the settings
         foolproofSettings.registerModeSettings(OH_FOOLPROOF_SETTINGS,
                 new OfficeHoursFoolproofDesign((OfficeHoursApp) app,copyTAs));
@@ -338,6 +344,11 @@ public class OfficeHoursWorkspace extends AppWorkspaceComponent {
                 allTAs.add(a);
             }
         }
+        
+        Comparator<TeachingAssistantPrototype> comparator = (TeachingAssistantPrototype o1, TeachingAssistantPrototype o2) -> {
+                return o1.getName().compareTo(o2.getName());
+        };
+        Collections.sort(allTAs, comparator);
     }
     
     //INITIALING THE 24 TIMESLOTS FOR COPYOH SO THERE'S NO NULL POINTER
