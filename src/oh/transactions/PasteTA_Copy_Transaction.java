@@ -15,7 +15,7 @@ import oh.workspace.OfficeHoursWorkspace;
  *
  * @author bingling.dong
  */
-public class PasteTA_Transaction implements jTPS_Transaction {
+public class PasteTA_Copy_Transaction implements jTPS_Transaction {
     TeachingAssistantPrototype TAToBePasted;
     OfficeHoursWorkspace ohws;
     OfficeHoursData data;
@@ -26,7 +26,7 @@ public class PasteTA_Transaction implements jTPS_Transaction {
     int copyJforEmail;
     int index;
 
-    public PasteTA_Transaction(TeachingAssistantPrototype selectedTA,OfficeHoursWorkspace ohws,OfficeHoursData data
+    public PasteTA_Copy_Transaction(TeachingAssistantPrototype selectedTA,OfficeHoursWorkspace ohws,OfficeHoursData data
                                , ArrayList<Integer> numberOfPasteForName, ArrayList<Integer> numberOfPasteForEmail, int index){
         this.TAToBePasted= selectedTA;
         this.ohws= ohws;

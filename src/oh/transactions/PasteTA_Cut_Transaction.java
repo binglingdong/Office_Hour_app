@@ -14,23 +14,20 @@ import oh.workspace.OfficeHoursWorkspace;
  *
  * @author bingling.dong
  */
-public class CutTA_Transaction implements jTPS_Transaction{
-    OfficeHoursWorkspace ohws;
+public class PasteTA_Cut_Transaction implements jTPS_Transaction{
     TeachingAssistantPrototype selectedTA;
+    OfficeHoursWorkspace ohws;
     OfficeHoursData data;
     
-    public CutTA_Transaction(OfficeHoursWorkspace ohws, TeachingAssistantPrototype selectedTA,OfficeHoursData data){
-        this.ohws=ohws;
+    public PasteTA_Cut_Transaction(TeachingAssistantPrototype selectedTA,OfficeHoursWorkspace ohws,OfficeHoursData data){
         this.selectedTA= selectedTA;
-        this.data=data;
+        this.ohws= ohws;
+        this.data= data;
     }
-
+    
     @Override
     public void doTransaction() {
-        //Since when you remove a TA from the backup copy TA list, you are not removing the actual oh from the backup oh
-        // list, you are just simply updating the list that's showing to the user, you can just remove the ta and add it back
-        // anytime you want. Their oh will always be in the backup oh sheet. 
-        ohws.getCopyTAs().remove(selectedTA);   
+        ohws.getCopyTAs().add(selectedTA);
         ohws.updateTaTableForRadio(data.getTeachingAssistants());
         ohws.resetOHToMatchTA(data, data.getOfficeHours());
         ohws.removeOHToMatchTA(data, data.getTeachingAssistants(), data.getOfficeHours());
@@ -39,11 +36,10 @@ public class CutTA_Transaction implements jTPS_Transaction{
 
     @Override
     public void undoTransaction() {
-        ohws.getCopyTAs().add(selectedTA);      //add the ta back to the copy list. 
-        ohws.updateTaTableForRadio(data.getTeachingAssistants()); // and update it
+        ohws.getCopyTAs().remove(selectedTA);
+        ohws.updateTaTableForRadio(data.getTeachingAssistants());
         ohws.resetOHToMatchTA(data, data.getOfficeHours());
         ohws.removeOHToMatchTA(data, data.getTeachingAssistants(), data.getOfficeHours());
         ohws.updateBgColorForCell();
     }
-    
 }
